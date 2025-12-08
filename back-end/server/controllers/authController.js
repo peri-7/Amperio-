@@ -1,0 +1,72 @@
+const User = require('../models/userModel');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+// 1. Sign up
+const register = async (req, res) => {
+	const { name, email, password } = req.body;
+
+	try {
+		// A. check if user exists
+		const existingUser = await User.findByEmail(email);
+		if (existingUser) {
+			return res.status(400).json({ message: 'User already exists' });
+		}
+
+		// B. hash the password 
+		const salt = await bcrypt.genSalt(10);
+		const hashedPassword = await bcrypt.hash(password, salt);
+
+		// C. save to DB
+		await User.create(name, email, hashedPassword);
+
+		// D. create token for login
+		const newUserId = result.insertId;
+
+		const token = jwt.sign(
+			{ id: newUserId },
+			process.env.JWT_SECRET || 'secret', // Use your .env variable here
+			{ expiresIn: '1h' }
+		);
+
+		// E. send token back
+		res.status(201).json({
+			message: 'User registered and logged in',
+			token,
+			user: { id: newUserId, name, email }
+		});
+
+	} catch (err) {
+		res.status(500).json({ message: 'Server error' });
+	}
+};
+
+
+// 2. Login
+const login = async (req, res) => {
+	const { email, password } = req.body;
+
+	try {
+		// A. find user by email
+		const user = await User.findByEmail(email);
+		if (!user) {
+			return res.status(400).json({ message: 'Invalid credentials' });
+		}
+
+		// B. compare the password sent vs the scrambled password in DB
+		const isMatch = await bcrypt.compare(password, user.password);
+		if (!isMatch) {
+			return res.status(400).json({ message: 'Invalid credentials' });
+		}
+
+		// C. generate Token (The ID Card)
+		// We hide the user's ID inside the token
+		const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+		res.json({ token, user: { id: user.user_id, name: user.username, email: user.email } });
+	} catch (err) {
+		res.status(500).json({ message: 'Server error' });
+	}
+};
+
+module.exports = { signup, login };
