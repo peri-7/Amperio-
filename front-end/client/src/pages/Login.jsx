@@ -15,7 +15,7 @@ const Login = () => {
       const { token, user } = res.data;
       
       loginAction(user, token);
-      navigate("/dashboard");
+      navigate("/profile");
       
     } catch (err) {
       alert(err.response.data.message || "Error logging in");
