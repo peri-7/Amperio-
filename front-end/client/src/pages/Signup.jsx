@@ -25,7 +25,7 @@ const Signup = () => {
       
       // 4. Redirect to Dashboard
       alert("Sign-up Successful!");
-      navigate("/dashboard");
+      navigate("/profile");
 
     } catch (err) {
       alert(err.response.data.message || "Error registering");
