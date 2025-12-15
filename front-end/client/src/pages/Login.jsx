@@ -1,13 +1,18 @@
 import { useState, useContext } from "react";
 import api from "../axiosConfig";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 const Login = () => {
   const [input, setInput] = useState({ identifier: "", password: "" });
   const { loginAction } = useContext(AuthContext);
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // if we come from a page go there, else go to profile
+  const from = location.state?.from?.pathname || "/profile";
+	
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -15,7 +20,7 @@ const Login = () => {
       const { token, user } = res.data;
       
       loginAction(user, token);
-      navigate("/profile");
+      navigate(from, {replace: true});
       
     } catch (err) {
       alert(err.response.data.message || "Error logging in");

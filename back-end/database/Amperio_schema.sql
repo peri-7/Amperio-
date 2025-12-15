@@ -47,7 +47,7 @@ CREATE TABLE Charger (
 	station_id INT NOT NULL,
 	installed_at timestamp not null,
 	last_checked timestamp not null,
-	charger_status enum('in_use', 'ready_to_use', 'out_of_order') not null,
+	charger_status enum('available', 'charging', 'reserved', 'malfunction', 'offline') not null,
 	FOREIGN KEY (power) REFERENCES POWER(power)
 	ON DELETE RESTRICT ON UPDATE CASCADE,
 	FOREIGN KEY (connector_id) REFERENCES Connector(connector_id)
