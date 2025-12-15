@@ -1,13 +1,14 @@
+import Navbar from "../components/layout/navbar";
+import MapView from "../components/map/mapview";
 
-
-const Map = () => {
-
+export default function Map() {
   return (
-    <div>
-	<h1>XARTHS</h1>
-	<h4>syntoma konta sas</h4>
-    </div>
+    <>
+      <Navbar />
+      <div style={{ height: "calc(100vh - 56px)", marginTop: "56px" ,width: "100vw", }}>
+        <MapView />
+      </div>
+    </>
   );
-};
+}
 
-export default Map;
