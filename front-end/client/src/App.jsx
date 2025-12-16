@@ -7,29 +7,29 @@ import Profile from "./pages/Profile";
 import Map from "./pages/Map";
 
 function App() {
-  return (
-    <Router>
-      <AuthProvider>
+	return (
+		<Router>
+			<AuthProvider>
 
-        <Routes>
-  {/* Default */}
-  <Route path="/" element={<Navigate to="/map" replace />} />
+				<Routes>
+					{/* Default */}
+					<Route path="/" element={<Navigate to="/map" replace />} />
 
-  {/* Public */}
-  <Route path="/map" element={<Map />} />
-  <Route path="/login" element={<Login />} />
-  <Route path="/signup" element={<Signup />} />
+					{/* Public */}
+					<Route path="/map" element={<Map />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="/signup" element={<Signup />} />
 
-  {/* Private */}
-  <Route element={<PrivateRoute />}>
-    <Route path="/profile" element={<Profile />} />
-  </Route>
-</Routes>
+					{/* Private */}
+					<Route element={<PrivateRoute />}>
+						<Route path="/profile" element={<Profile />} />
+					</Route>
+				</Routes>
 
 
-      </AuthProvider>
-    </Router>
-  );
+			</AuthProvider>
+		</Router>
+	);
 }
 
 export default App;

@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import api from "./axiosConfig"
 
 // 1. Create the Context (The empty box)
 export const AuthContext = createContext();
@@ -7,6 +8,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [loading, setLoading] = useState(true);
 
   // Action: Login (Save data)
   const loginAction = (userData, userToken) => {
@@ -22,9 +24,31 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
   };
 
+  // restore user data on refresh
+  useEffect(() => {
+	  const verifyUser = async () => {
+		  if(!token) {
+			  setLoading(false);
+			  return;
+		  }
+
+		  try {
+			  const res = await api.get("/users/userdata");
+			  setUser(res.data);
+		  } catch (err) {
+			  console.error("Invalid or Expired Token");
+			  logoutAction();
+		  } finally {
+			  setLoading(false);
+		  }
+	  };
+
+	  verifyUser();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ token, user, loginAction, logoutAction }}>
-      {children}
+    <AuthContext.Provider value={{ token, user, loading, loginAction, logoutAction }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
