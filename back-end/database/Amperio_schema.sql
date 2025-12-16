@@ -95,7 +95,7 @@ CREATE TABLE Users(
 	-- ----------------------------
 	default_charger_power int,
 	created_at timestamp not null default current_timestamp,
-	role enum('User', 'Admin') not null,
+	role enum('user', 'admin') not null,
 	foreign key (default_charger_power) references Power(power)
 	on update restrict on delete restrict
 );
