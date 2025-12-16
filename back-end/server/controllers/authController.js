@@ -4,11 +4,11 @@ const jwt = require('jsonwebtoken');
 
 // 1. Sign up
 const signup = async (req, res) => {
-	const { name, email, password } = req.body;
+	const { username, email, password } = req.body;
 
 	try {
 		// A. check if user exists
-		const existingUser = await User.findByIdentifier(email, name);
+		const existingUser = await User.findByIdentifier(email, username);
 		if (existingUser) {
 			return res.status(400).json({ message: 'User already exists' });
 		}
@@ -18,7 +18,7 @@ const signup = async (req, res) => {
 		const hashedPassword = await bcrypt.hash(password, salt);
 
 		// C. save to DB
-		result = await User.create(name, email, hashedPassword);
+		result = await User.create(username, email, hashedPassword);
 
 		// D. create token for login
 		const newUserId = result.insertId;
@@ -33,7 +33,7 @@ const signup = async (req, res) => {
 		res.status(201).json({
 			message: 'User registered and logged in',
 			token,
-			user: { user_id: newUserId, name: name, email: email, role: 'user' }
+			user: { user_id: newUserId, username: username, email: email, role: 'user' }
 		});
 
 	} catch (err) {

@@ -48,7 +48,7 @@ CREATE TABLE Charger (
 	installed_at timestamp not null,
 	last_checked timestamp not null,
 	charger_status enum('available', 'charging', 'reserved', 'malfunction', 'offline') not null,
-	current_price int decimal(5,3),
+	current_price decimal(5,3),
 	FOREIGN KEY (power) REFERENCES POWER(power)
 	ON DELETE RESTRICT ON UPDATE CASCADE,
 	FOREIGN KEY (connector_id) REFERENCES Connector(connector_id)
@@ -95,7 +95,7 @@ CREATE TABLE Users(
 	-- ----------------------------
 	default_charger_power int,
 	created_at timestamp not null default current_timestamp,
-	role enume('User', 'Admin') not null,
+	role enum('User', 'Admin') not null,
 	foreign key (default_charger_power) references Power(power)
 	on update restrict on delete restrict
 );
