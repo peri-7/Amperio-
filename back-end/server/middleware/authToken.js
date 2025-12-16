@@ -19,8 +19,8 @@ const verifyToken = (req, res, next) => {
     }
     
     // 4. Success! Save the user ID so the controller can use it
-    req.user_id = decoded.id; 
-    
+    req.user_id = decoded.user_id; 
+    req.role = decoded.role;
     // 5. Move to the next step (the Controller)
     next();
   });

@@ -4,7 +4,7 @@ class UserModel {
 
 	// return data from user with that ID
 	static async findByID(id) {
-		const sql = 'SELECT username, email, default_charger_power FROM users WHERE user_id = ?';
+		const sql = 'SELECT username, email, default_charger_power, role FROM users WHERE user_id = ?';
 		const [rows] = await db.query(sql, id);
 		return rows[0]; 
 	}
@@ -18,8 +18,8 @@ class UserModel {
 
 	// create new user
 	static async create(name, email, password) {
-		const sql = 'INSERT INTO users (username, email, safe_password) VALUES (?, ?, ?)'; 
-		const [result] = await db.query(sql, [name, email, password]); // pwd is hashed from controller
+		const sql = 'INSERT INTO users (username, email, safe_password, role) VALUES (?, ?, ?, ?)'; 
+		const [result] = await db.query(sql, [name, email, password, 'user']); // pwd is hashed from controller
 		return result;
 	}
 

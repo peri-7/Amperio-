@@ -24,7 +24,7 @@ const signup = async (req, res) => {
 		const newUserId = result.insertId;
 
 		const token = jwt.sign(
-			{ id: newUserId },
+			{ user_id: newUserId, role: 'user' },
 			process.env.JWT_SECRET, // Use your .env variable here
 			{ expiresIn: '1h' }
 		);
@@ -33,7 +33,7 @@ const signup = async (req, res) => {
 		res.status(201).json({
 			message: 'User registered and logged in',
 			token,
-			user: { id: newUserId, name: name, email: email }
+			user: { user_id: newUserId, name: name, email: email, role: 'user' }
 		});
 
 	} catch (err) {
@@ -62,9 +62,9 @@ const login = async (req, res) => {
 
 		// C. generate Token (The ID Card)
 		// We hide the user's ID inside the token
-		const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+		const token = jwt.sign({ user_id: user.user_id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-		res.json({ token, user: { id: user.user_id, name: user.username, email: user.email } });
+		res.json({ token, user: { user_id: user.user_id, name: user.username, email: user.email, role: user.role } });
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ message: 'Server error' });
