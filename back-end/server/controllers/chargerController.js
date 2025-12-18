@@ -19,12 +19,12 @@ const getPoints = async (req, res, next) => {
 
             // If valid, fetch filtered points using the static method
             const points = await Charger.getByStatus(status);
-            return res.status(200).json(points);
+            return res.status(200).sendData(points);
         }
 
         // CASE 2: No status provided, return all points
         const points = await Charger.getAllChargers();
-        return res.status(200).json(points);
+        return res.status(200).sendData(points);
 
     } catch (error) {
         next(error);
