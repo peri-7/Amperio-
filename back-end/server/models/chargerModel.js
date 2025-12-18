@@ -23,6 +23,17 @@ class ChargerModel {
 		// Return the first result (or undefined if not found)
 		return rows[0];
 	}
+	// do healthcheck
+	static async healthcheck() {
+		const sql = `SELECT 
+				COUNT(*) as total,
+				COALESCE(SUM(CASE WHEN charger_status IN ('available', 'charging', 'reserved') THEN 1 ELSE 0 END),0) as online,
+				COALESCE(SUM(CASE WHEN charger_status IN ('offline', 'malfunction') THEN 1 ELSE 0 END),0) as offline
+			    FROM Charger;`
+		const [rows] = await db.query(sql);
+		return rows[0];
+	}
+
 }
 
 module.exports = ChargerModel;

@@ -12,7 +12,7 @@ const getPoints = async (req, res, next) => {
         if (status) {
             // Requirement: Return 401 if status is not in the enumeration
             if (!VALID_STATUSES.includes(status)) {
-                res.status(401);
+                res.status(400);
                 const error = new Error(`Invalid status parameter. Supported values: ${VALID_STATUSES.join(', ')}`);
 		return next(error);
             }
@@ -57,4 +57,33 @@ const getPointDetails = async (req, res, next) => {
         next(error);
     }
 };
-module.exports = { getPoints, getPointDetails };
+
+// Healthcheck
+const healthcheck = async (req, res, next) => {
+    try {
+        const stats = await Charger.healthcheck();
+
+        // Create connection  Strring
+        // Ideally use process.env variables. If not available, placeholders are used.
+        // WARNING: Avoid showing real passwords in production.
+        const dbUser = process.env.DB_USER || 'root';
+        const dbHost = process.env.DB_HOST || 'localhost';
+        const dbName = process.env.DB_NAME || 'amperio';
+        const connectionString = `mysql://${dbUser}@${dbHost}/${dbName}`; // Requested version
+
+        //build 200 OK response
+        res.status(200).json({
+            status: "OK",
+            dbconnection: connectionString,
+            n_charge_points: stats.total,
+            n_charge_points_online: stats.online,
+            n_charge_points_offline: stats.offline
+        });
+
+    } catch (error) {
+        res.status(400);
+        next(error);
+    }
+};
+
+module.exports = { getPoints, getPointDetails, healthcheck };

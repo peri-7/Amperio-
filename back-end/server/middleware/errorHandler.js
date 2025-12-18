@@ -8,6 +8,14 @@ const errorHandler = (err, req, res, next) => {
     // set status code as result
     res.status(statusCode);
 
+    let errorMessage = err.message;
+
+    // If err.message is empty, fill it with the Requirement defaults
+    if (!errorMessage) {
+        if (statusCode === 400) errorMessage = 'Bad request'; 
+        if (statusCode === 404) errorMessage = 'Not found'; 
+        if (statusCode === 500) errorMessage = 'Internal server error';
+    }
     // create error log
     const errorLog = {
         call: req.originalUrl,                     // The full URL called
