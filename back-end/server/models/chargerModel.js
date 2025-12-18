@@ -23,6 +23,7 @@ class ChargerModel {
 		// Return the first result (or undefined if not found)
 		return rows[0];
 	}
+
 	// do healthcheck
 	static async healthcheck() {
 		const sql = `SELECT 
@@ -32,6 +33,28 @@ class ChargerModel {
 			    FROM Charger;`
 		const [rows] = await db.query(sql);
 		return rows[0];
+	}
+
+
+
+	//get Specific Point Status
+	static async getPointStatus(id) {
+		const sql = 'SELECT status FROM Points WHERE pointid = ?';
+		const [rows] = await db.query(sql, [id]);
+		return rows[0].status;
+	}
+
+	static async setPointStatus(id, status) {
+		const sql = 'UPDATE Points SET status = ? WHERE pointid = ?';
+		const [result] = await db.query(sql, [status, id]);
+		return result;
+	}
+
+	static async setReservationEndTime(id, endTime) {
+		// Insert a reservation record for this charger. user_id is NULL because this endpoint doesn't provide user context.
+		const sql = 'INSERT INTO Reservation (user_id, charger_id, reservation_start_time, reservation_end_time) VALUES (NULL, ?, NOW(), ?)';
+		const [result] = await db.query(sql, [id, endTime]);
+		return result;
 	}
 
 }

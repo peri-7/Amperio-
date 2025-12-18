@@ -58,6 +58,7 @@ const getPointDetails = async (req, res, next) => {
     }
 };
 
+
 // Healthcheck
 const healthcheck = async (req, res, next) => {
     try {
@@ -82,8 +83,59 @@ const healthcheck = async (req, res, next) => {
 
     } catch (error) {
         res.status(400);
+	next(error);
+}
+};
+
+
+	    const reservePoint = async (req, res, next) => {
+    try {
+        
+        //get point
+        const { id } = req.params;
+        const point = await Charger.getById(id);
+
+        //check if it exists
+        if (!point) {
+            res.status(404); //shouldn't this be a 400 error since its invalid parameters??
+            return next(new Error(`Point with ID ${id} not found for reservation`));
+        }
+        
+        //get minutes or set default
+        let minutes = req.params.minutes !== undefined ? parseInt(req.params.minutes, 10) : 30;
+
+        //check if valid
+        if (Number.isNaN(minutes) || minutes <= 0 || minutes > 24 * 60) {
+            res.status(400);
+            return next(new Error('Invalid minutes parameter. Must be an integer between 1 and 1440'));
+        }//here there is a check for the validity of the minutes data but we dont really care about it
+        //basically the exercise says if its above the max we set it to the max and if its below the min
+        //we set it to the min but should we still do that if the values are extremely out of range?
+
+        //check if point is available
+        if( await Charger.getPointStatus(id) == 'available') {
+            //set json parameters
+            point.status = 'reserved';
+            point.reservationendtime = formatTimestamp(new Date(Date.now() + minutes*60000));
+
+            //update database
+            await Charger.setPointStatus(id, 'reserved'); //do we need to check if these await functions time out somehow?
+            await Charger.setReservationEndTime(id, point.reservationendtime);
+            
+            console.log({ pointid: id, status: point.status, reservationendtime: point.reservationendtime });
+            return res.status(200).json({ pointid: id, status: point.status, reservationendtime: point.reservationendtime });
+        }
+        else {
+            res.status(400);
+            console.log({ pointid: id, status: point.status, reservationendtime: point.reservationendtime });
+            return next(new Error(`Point with ID ${id} is not available for reservation`));
+        }
+    } catch (error) {
         next(error);
     }
 };
 
-module.exports = { getPoints, getPointDetails, healthcheck };
+
+
+module.exports = { getPoints, getPointDetails, reservePoint, healthcheck };
+

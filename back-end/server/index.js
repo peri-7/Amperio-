@@ -28,6 +28,8 @@ app.use('/api/points', chargerRoutes);
 //to be fixed if /points/id is considered wrong
 app.use('/api/point', chargerRoutes);
 
+app.use('/api/reserve', chargerRoutes);
+
 // 404 handler
 app.use((req, res, next) => {
   const error = new Error('Not Found');
