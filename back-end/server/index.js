@@ -25,6 +25,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 //app.use('/api/admin', adminRoutes);
 app.use('/api/points', chargerRoutes);
+//to be fixed if /points/id is considered wrong
 app.use('/api/point', chargerRoutes);
 
 // 404 handler
