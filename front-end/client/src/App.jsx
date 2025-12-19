@@ -4,7 +4,6 @@ import { AuthProvider } from "./context/AuthContext";
 // Routes
 import PrivateRoute from "./components/PrivateRoutes";
 import AdminRoute from "./components/AdminRoutes";
-import PublicRoute from "./components/PublicRoutes";
 //pages
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -28,7 +27,7 @@ function App() {
 					<Route path="/unauthorized" element={<Unauthorized />} />
 
 					{/* Private */}
-					<Route element={<PrivateRoute />}>
+					<Route element={<PrivateRoute/>}>
 
 						<Route path="/profile" element={<Profile />} />
 					</Route>
