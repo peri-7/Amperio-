@@ -49,12 +49,12 @@ CREATE TABLE Charger (
 	last_checked timestamp not null,
 	charger_status enum('available', 'charging', 'reserved', 'malfunction', 'offline') not null,
 	current_price decimal(5,3),
-	FOREIGN KEY (power) REFERENCES POWER(power)
+	FOREIGN KEY (power) REFERENCES Power(power)
 	ON DELETE RESTRICT ON UPDATE CASCADE,
 	FOREIGN KEY (connector_id) REFERENCES Connector(connector_id)
 	ON DELETE RESTRICT ON UPDATE CASCADE,
 	FOREIGN KEY (station_id) REFERENCES Station(station_id)
-	ON DELETE NO ACTION ON UPDATE NO ACTION
+	ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 
@@ -72,9 +72,9 @@ CREATE TABLE PricingHistory (
 	wholesale_price DECIMAL(5,3) NOT NULL,
 	final_price DECIMAL(5,3) NOT NULL,
 	FOREIGN KEY (charger_id) REFERENCES Charger(charger_id)
-	ON UPDATE CASCADE ON DELETE CASCADE,
+	ON UPDATE CASCADE ON DELETE RESTRICT,
 	FOREIGN KEY (power) REFERENCES Power(power)
-	ON UPDATE CASCADE ON DELETE CASCADE
+	ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 
@@ -97,7 +97,7 @@ CREATE TABLE Users(
 	created_at timestamp not null default current_timestamp,
 	role enum('user', 'admin') not null,
 	foreign key (default_charger_power) references Power(power)
-	on update restrict on delete restrict
+	on update cascade on delete restrict
 );
 
 
@@ -111,9 +111,9 @@ CREATE TABLE Reservation(
 	reservation_start_time timestamp not null,
 	reservation_end_time timestamp not null,
 	foreign key (user_id) references Users(user_id)
-	on update cascade on delete cascade,
+	on update cascade on delete restrict,
 	foreign key (charger_id) references Charger(charger_id)
-	on update cascade on delete cascade
+	on update cascade on delete restrict
 );
 
 
@@ -149,5 +149,5 @@ CREATE TABLE ChargerStatusHistory (
 	old_state VARCHAR(20),
 	new_state VARCHAR(20),
 	FOREIGN KEY (charger_id) REFERENCES Charger(charger_id) 
-	ON DELETE CASCADE ON UPDATE CASCADE
+	ON DELETE RESTRICT ON UPDATE CASCADE
 );
