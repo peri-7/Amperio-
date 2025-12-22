@@ -42,9 +42,9 @@ SELECT
     	DATE_FORMAT(end_time, '%Y-%m-%d %H:%i') AS endtime,
     	start_soc AS startsoc,
     	end_soc AS endsoc,
-    	CAST(energy_delivered AS float) AS totalkwh,
+    	CAST(energy_delivered AS FLOAT) AS totalkwh,
     	CAST(price_per_kwh AS FLOAT) AS kwhprice,
-    	CAST(cost AS FLOAT) AS amount
+    	CAST(cost AS FLOAT) AS Amount
 FROM Session;
 
 
