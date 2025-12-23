@@ -7,11 +7,12 @@ const responseFormatter = (req, res, next) => {
         //if i have chosen  csv and return object is array of objects
         if (format === 'csv' && Array.isArray(data)) {
             try {
-                const json2csvParser = new Parser();
+                const json2csvParser = new Parser({ withBOM: true});
                 const csv = json2csvParser.parse(data);
                 res.header('Content-Type', 'text/csv');
-                res.attachment('data.csv'); // trigger download of csv file
-                return res.send(csv);
+                //res.attachment('data.csv'); // trigger download of csv file
+                res.header('Content-Disposition', 'inline; filename="data.csv"');
+		return res.send(csv);
             } catch (err) {
                 // If CSV conversion fails call error handler
                 return next(err);
