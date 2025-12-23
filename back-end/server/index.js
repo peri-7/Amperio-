@@ -14,6 +14,8 @@ const authRoutes = require('./routes/authRoutes');
 const chargerRoutes = require('./routes/chargerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
+const stationRoutes = require('./routes/stationRoutes');
+
 const app = express();
 
 app.use(cors());
@@ -35,6 +37,8 @@ app.use('/api/pointstatus', chargerRoutes);
 app.use('/api/updpoint', chargerRoutes);
 
 app.use('/api/newsession', sessionRoutes);
+
+app.use('/api/station',stationRoutes);
 
 // 404 handler
 app.use((req, res, next) => {

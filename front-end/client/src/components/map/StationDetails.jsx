@@ -8,6 +8,10 @@ const CONNECTOR_NAMES = {
 };
 
 export default function StationDetails({ station, onClose }) {
+
+  //check if a station doesnt have any chargers yet 
+  if(!station) return null;
+
   return (
     <>
       {/* The Dark Overlay */}
@@ -24,7 +28,8 @@ export default function StationDetails({ station, onClose }) {
         <p className="facilities">Facilities: {station.facilities}</p>
 
         <div className="charger-list">
-          {station.chargers.map((charger) => (
+          { station.chargers && station.chargers.length >0 ? (
+          station.chargers.map((charger) => (
             <div key={charger.charger_id} className="charger-card">
               <div style={{ color: "#333" }}> {/* Explicitly set text color */}
                 <strong style={{ display: "block", fontSize: "1.1rem" }}>
@@ -43,7 +48,10 @@ export default function StationDetails({ station, onClose }) {
                 <button className="reserve-btn">Reserve Now</button>
               )}
             </div>
-          ))}
+          ))
+        ):(
+          <p>No chargers available at this location.</p>
+        )}
         </div>
       </div>
     </>

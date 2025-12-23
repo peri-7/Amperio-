@@ -27,12 +27,13 @@ CREATE TABLE Connector (
 -- -----------------------------------------------------
 CREATE TABLE Station (
 	station_id INT AUTO_INCREMENT PRIMARY KEY,
-	address VARCHAR(45),
+	address VARCHAR(80),
 	longitude FLOAT NOT NULL,
 	latitude FLOAT NOT NULL,
 	postal_code INT,
 	facilities MEDIUMTEXT,
-	google_maps_link VARCHAR(255)
+	google_maps_link VARCHAR(255),
+	score FLOAT
 );
 
 
