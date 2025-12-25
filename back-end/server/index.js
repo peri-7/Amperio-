@@ -28,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/station', stationRoutes);
 // lame clownish goofy-ass mount
 app.use('/api', requestedRoutes);
 
