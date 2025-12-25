@@ -15,7 +15,8 @@ const chargerRoutes = require('./routes/chargerRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
 const stationRoutes = require('./routes/stationRoutes');
-const metaRoutes = require('./routes/metaRoutes');
+const metaRoutes = require('./routes/metaRoutes');const requestedRoutes = require('./routes/requestedRoutes');
+
 const app = express();
 
 app.use(cors());
@@ -23,22 +24,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // mount routes
+// serious gigachad ultra super mounts
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/points', chargerRoutes);
-//to be fixed if /points/id is considered wrong
-app.use('/api/point', chargerRoutes);
-
-app.use('/api/reserve', chargerRoutes);
-
-app.use('/api/pointstatus', chargerRoutes);
-
-app.use('/api/updpoint', chargerRoutes);
-
-app.use('/api/newsession', sessionRoutes);
-
-app.use('/api/station',stationRoutes);
+app.use('/api/station', stationRoutes);
+// lame clownish goofy-ass mount
+app.use('/api', requestedRoutes);
 
 app.use('/api/meta',metaRoutes);
 // 404 handler
