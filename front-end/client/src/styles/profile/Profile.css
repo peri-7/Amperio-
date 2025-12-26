@@ -1,108 +1,146 @@
-/* src/styles/profile/Profile.css */
-
-/* --- Variables (If these are used globally, move to index.css) --- */
-:root {
-  --primary-color: #2563EB;
-  --text-main: #1F2937;
-  --text-muted: #6B7280;
-  --danger-color: #EF4444;
-  --bg-color: #F3F4F6;
-}
-
-/* --- Page Layout --- */
+/* Container for the whole profile page */
 .profile-container {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 1.5rem;
-  font-family: 'Inter', sans-serif;
-  color: var(--text-main);
+  width: 100%;       
+  max-width: none;   
+  padding: 2rem 4rem;
+  box-sizing: border-box;  
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
 }
 
-.loading-screen, .error-screen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 60vh;
-  font-size: 1.25rem;
-  color: var(--text-muted);
-}
-
-/* --- Header --- */
+/* --- Header Section --- */
 .profile-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 2.5rem;
+  align-items: center;
+  margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .header-left h1 {
-  font-size: 2rem;
-  font-weight: 700;
   margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
 }
 
-.header-left .subtitle {
-  margin: 0.5rem 0 0 0;
-  color: var(--text-muted);
+.subtitle {
+  margin: 0.5rem 0 0;
+  color: #7f8c8d;
+  font-size: 0.95rem;
 }
 
-/* --- Header Buttons --- */
-.btn-map, .btn-logout {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
+.header-right {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Button Styles */
+button {
   cursor: pointer;
-  margin-left: 1rem;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .btn-map {
-  background-color: var(--primary-color);
+  background-color: #3498db;
   color: white;
 }
 
-.btn-logout {
-  background-color: white;
-  border: 1px solid #E5E7EB;
-  color: var(--danger-color);
+.btn-map:hover {
+  background-color: #2980b9;
 }
 
-/* --- Tabs --- */
+.btn-logout {
+  background-color: transparent;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+}
+
+.btn-logout:hover {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* --- Tab Navigation --- */
 .tab-wrapper {
   display: flex;
   gap: 2rem;
   margin-bottom: 2rem;
-  border-bottom: 2px solid #E5E7EB;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .btn-tab {
   background: none;
-  border: none;
-  padding: 0.75rem 0;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  cursor: pointer;
+  color: #7f8c8d;
+  padding: 0.8rem 0;
+  border-radius: 0;
   position: relative;
+  font-size: 1rem;
 }
 
-.btn-tab:hover, .btn-tab.active {
-  color: var(--primary-color);
+.btn-tab:hover {
+  color: #3498db;
 }
 
+/* Active Tab Indicator */
 .btn-tab.active {
-  font-weight: 600;
+  color: #3498db;
 }
 
 .btn-tab.active::after {
   content: '';
   position: absolute;
-  bottom: -2px;
+  bottom: -2px; /* Overlaps the wrapper border */
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: var(--primary-color);
+  background-color: #3498db;
 }
 
+/* --- Content Area --- */
+.tab-content {
+  min-height: 300px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* --- Loading / Error States --- */
+.loading-screen,
+.error-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+}
+
+.error-screen {
+  color: #e74c3c;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .header-right {
+    width: 100%;
+  }
+  
+  .btn-map, .btn-logout {
+    flex: 1;
+  }
+}

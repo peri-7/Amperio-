@@ -1,48 +1,83 @@
-/* Grid Layout */
+/* Grid Layout for the cards */
 .overview {
   display: grid;
-  /* Columns will be at least 300px wide, otherwise they stack */
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  /* This ensures cards stay a reasonable size */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+  gap: 1.5rem;
+  width: 100%;
 }
 
-/* --- CARD STYLING --- */
-/* This applies to all three card types */
-.kpi-card, .reservation, .charger-power {
-  background-color: #ffffff; /* WHITE Background */
-  border: 1px solid #e5e7eb;
+/* Base Card Style */
+.kpi-card,
+.reservation,
+.charger-power {
+  background-color: white;
   border-radius: 12px;
-  padding: 25px;
-  
-  /* Shadow to make it pop off the page */
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  
-  /* Flex to stack title and value vertically */
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #f0f0f0;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-/* Card Titles (e.g. "Total Sessions") */
-.overview h3 {
-  color: #6b7280; /* Gray text */
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin: 0 0 10px 0;
+/* Hover effect for all cards */
+.kpi-card:hover,
+.reservation:hover,
+.charger-power:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
-/* Big Numbers */
-.kpi-value, .default-power {
+/* Card Headings */
+.overview h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #95a5a6;
+  font-weight: 600;
+}
+
+/* --- KPI Cards Specifics --- */
+.kpi-value {
   font-size: 2.5rem;
-  font-weight: 800;
-  color: #111827; /* Very dark blue/black */
+  font-weight: 700;
+  color: #2c3e50;
   margin: 0;
 }
 
-/* Reservation Text */
+/* --- Reservation Card Specifics --- */
+.reservation {
+  /* Span 2 columns if screen is wide enough, optional */
+  grid-column: span 1; 
+  border-left: 4px solid #f1c40f; /* Yellow accent for upcoming */
+}
+
 .rsv-info {
-  margin: 5px 0;
+  margin: 0.25rem 0;
   font-size: 1.1rem;
-  color: #374151;
+  font-weight: 500;
+  color: #34495e;
+}
+
+/* --- Charger Power Card Specifics --- */
+.charger-power {
+  border-left: 4px solid #2ecc71; /* Green accent for power */
+}
+
+.default-power {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+/* Make reservation span full width on very small screens if needed, 
+   or span 2 columns on large screens for better balance */
+@media (min-width: 800px) {
+  .reservation {
+    grid-column: span 2;
+  }
 }

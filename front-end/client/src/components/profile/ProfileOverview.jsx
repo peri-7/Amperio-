@@ -27,8 +27,8 @@ const ProfileOverview = ({ profile}) => {
 				if(kpiRes) {
 					setKpis(kpiRes.data);
 				}
-				if (upcomingRes.data) {
-					setUpcoming(upcomingRes.data);
+				if (upcomingRes.data && upcomingRes.data.length > 0) {
+					setUpcoming(upcomingRes.data[0]);
 				}
 			} catch (err) {
 				console.error("Error fetching overview data", err);

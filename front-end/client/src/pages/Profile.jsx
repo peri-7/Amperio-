@@ -57,7 +57,7 @@ const Profile = () => {
 	<header className="profile-header">
 	  <div className="header-left">
 	    <h1>Hello, {profile.username}</h1>
-	    <p className="subtitle">Charging Summary</p>
+	    <p className="subtitle">Profile</p>
 	  </div>
 	  <div className="header-right">
 	    <button className="btn-map" onClick={() => navigate("/map")}>Map</button>

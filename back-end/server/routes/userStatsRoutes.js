@@ -6,5 +6,6 @@ const verifyToken = require('../middleware/authToken');
 
 
 router.get('/kpis', verifyToken, userStatsController.getKpis);
+router.get('/charts', verifyToken, userStatsController.getChartData);
 
 module.exports = router;
