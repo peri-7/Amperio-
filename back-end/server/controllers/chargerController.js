@@ -1,6 +1,7 @@
 const Charger = require('../models/chargerModel');
 const { formatTimestamp } = require('../utils/dateUtils');
 const { parseUrlDate } = require('../utils/dateUtils');
+const { XMLParser } = require('fast-xml-parser');
 
 // Define the valid statuses based on your requirements
 const VALID_STATUSES = ['available', 'charging', 'reserved', 'offline', 'malfucntion'];
@@ -170,6 +171,37 @@ const updatePoint = async (req, res, next) => {
     }
 };
 
+const getPrices = async (req, res, next) => {
+    try {
+
+        //get current date and time in required format YYYYMMDD0000
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth() + 1;
+        const day = now.getDate();
+        const currentDateTime = `${year}${month}${day}0000`;
+
+        //set up url parameters
+        const url = "https://web-api.tp.entsoe.eu/api"
+        const ENTSOE_TOKEN = process.env.ENTSOE_TOKEN;
+        const documentType = "A44";
+        const Domain = "10YGR-HTSO-----Y";
+        const urlWithParams = `${url}?documentType=${documentType}&in_Domain=${Domain}&out_Domain=${Domain}&periodStart=${currentDateTime}&periodEnd=${currentDateTime}&securityToken=${ENTSOE_TOKEN}`;
+
+        //fetch data from ENTSOE
+        const response = await fetch(urlWithParams);
+        const xmlText = await response.text();
+
+        // parse XML and return ordered prices array
+        const prices = new XMLParser().parse(xmlText).Publication_MarketDocument.TimeSeries.Period.Point.map(p => Number(p['price.amount']));
+        return res.status(200).json({ prices });
+        //currently the prices are returned in a list so prices[0] is 23:00-23:15 in UTC time which is 
+        //actually the price for 01:00-01:15 in Greece local time (UTC+2)
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 
 const getTimePointStatus= async (req, res,next) => {
     try {
@@ -201,5 +233,5 @@ const getTimePointStatus= async (req, res,next) => {
     }
 };
 
-module.exports = { getPoints, getPointDetails, reservePoint, healthcheck , getTimePointStatus, updatePoint };
+module.exports = { getPoints, getPointDetails, reservePoint, healthcheck , getTimePointStatus, updatePoint, getPrices };
 

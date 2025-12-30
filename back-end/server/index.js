@@ -34,6 +34,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/station', stationRoutes);
 app.use('/api/reservations', reservationsRoutes);
 app.use('/api/userStats', userStatsRoutes);
+app.use('/api/entsoe', chargerRoutes);
 // lame clownish goofy-ass mount
 app.use('/api', requestedRoutes);
 
