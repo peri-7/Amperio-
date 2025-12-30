@@ -35,10 +35,10 @@ app.use('/api/station', stationRoutes);
 app.use('/api/reservations', reservationsRoutes);
 app.use('/api/userStats', userStatsRoutes);
 app.use('/api/entsoe', chargerRoutes);
+app.use('/api/meta',metaRoutes);
 // lame clownish goofy-ass mount
 app.use('/api', requestedRoutes);
 
-app.use('/api/meta',metaRoutes);
 // 404 handler
 app.use((req, res, next) => {
   const error = new Error('Not Found');

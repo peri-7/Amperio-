@@ -44,7 +44,7 @@ SELECT
     	end_soc AS endsoc,
     	CAST(energy_delivered AS FLOAT) AS totalkwh,
     	CAST(price_per_kwh AS FLOAT) AS kwhprice,
-    	CAST(cost AS FLOAT) AS Amount
+    	CAST((energy_delivered * price_per_kwh) AS FLOAT) AS Amount
 FROM Session;
 
 

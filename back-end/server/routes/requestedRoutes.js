@@ -16,7 +16,7 @@ router.post('/udpoint/:id', chargerController.updatePoint);
 // e) katagrafh session
 router.post('/newsession/', sessionController.newSession);
 // f) lista sessions
-// router.get('/sessions/:id/:from/:to', sessionController.getSessions);
+router.get('/sessions/:id/:from/:to', sessionController.getSessions);
 // g) metaboles katasthshs shmeiou
 router.get('/pointstatus/:pointid/:from/:to',responseFormatter,chargerController.getTimePointStatus);
 
