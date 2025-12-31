@@ -1,4 +1,4 @@
-//cast type of parameter
+//cast parameter to requested type
 const castType = (x, type) =>
 {
 	switch(type)

@@ -2,94 +2,50 @@ const Session = require('../models/sessionModel');
 const Charger = require('../models/chargerModel');
 const { formatTimestamp } = require('../utils/dateUtils');
 const { parseUrlDate } = require('../utils/dateUtils');
-const { validateType } = require('../utils/validateUtils');
+const { validateTimestamp } = require('../utils/validateUtils');
 const { castType } = require('../utils/sanitizeUtils');
-
-const throwErrorLog = (res, next, stast, msg) =>
-{
-	res.status(stat);
-        const error = new Error (msg);
-	return next (error);
-}
+const { extractTimestamp } = require('../utils/sanitizeUtils');
 
 const newSession = async (req, res, next) =>
 {
 	try
 	{
-		//check if body is empty
-		if( validateType(req.body, "null") )
-		{
-                        res.status(400);
-                        const error = new Error (`body missing`);
-                        return next (error);
-		}
-
 		//deconstruct body tuple
 		const { pointid, starttime, endtime, startsoc, endsoc, totalkwh, kwhprice, amount } = req.body;
 
-		//check pointid was given
-		if ( validateType(pointid, "null") )
-		{
-			res.status(400);
-			const error = new Error (`charger ID missing`);
-			return next (error);
-		}
-		
-		//check that pointid is integer
-		if ( !validateType(pointid, "integer") )
-		{
-			res.status(400);
-			const error = new Error (`charger ID must be integer`);
-                        return next (error);
-		}
 		//convert pointid to integer
 		const numChargerID = castType(pointid, "integer");
 
 		//check charger exists in database
-		if ( validateType( await Charger.getById(numChargerID), "null") )
+		if ((await Charger.getById(numChargerID)) == null )
 		{
 			res.status(400);
-                        const error = new Error (`charger doesn't exist`);
-                        return next (error);
+                        return next (new Error ("charger doesn't exist"));
 		}
+		
+		//extract valid start timestamp
+		const validStartTime = extractTimestamp(starttime);
 
-		//check starttime was given
-                if ( validateType(starttime, "null") )
-                {
-                        res.status(400);
-                        const error = new Error (`start timestamp missing`);
-                        return next (error);
-                }
-
-		//check if it is string
-		if( !validateType(starttime, "string") )
+		if ( validStartTime == null || !validateTimestamp(validStartTime) )
 		{
 			res.status(400);
+                        return next (new Error ("starttime not valid timestamp"));
 		}
-		//extract valid timestamp
 
-		//check endtime was given
-                if ( validateType(endtime, "null") )
+		//extract valid end timestamp
+                const validEndTime = extractTimestamp(endtime);
+
+                if ( validEndTime == null || !validateTimestamp(validEndTime) )
                 {
                         res.status(400);
-                        const error = new Error (`end timestamp missing`);
-                        return next (error);
+                        return next (new Error ("endtime not valid timestamp"));
                 }
 
-		//check startsoc was given
-                if ( validateType(startsoc, "null") )
-                {
-                        res.status(400);
-                        const error = new Error (`startsoc missing`);
-                        return next (error);
-                }
-
-		//check startsoc is integer
-                if ( !validateType(startsoc, "integer") )
-                {
-                        res.status(400);
-                        const error = new Error (`startsoc must be integer`);
-                        return next (error);
+		//start time after endtime
+		if ( validStartTime > validEndTime)
+		{
+			res.status(400);
+                        return next (new Error ("endtime cannot be before starttime"));
                 }
 
 		//convert startsoc to integer
@@ -99,25 +55,8 @@ const newSession = async (req, res, next) =>
 		if (numStartSoc < 0 || numStartSoc > 100)
 		{
 			res.status(400);
-			const error = new Error (`startsoc must be between 0 and 100`);
-                        return next (error);
+                        return next (new Error ("startsoc must be between 0 and 100"));
 		}
-
-		//check endsoc was given
-                if ( validateType(endsoc, "null") )
-                {
-                        res.status(400);
-                        const error = new Error (`endsoc missing`);
-                        return next (error);
-                }
-
-                //check endsoc is integer
-                if ( !validateType(endsoc, "integer") )
-                {
-                        res.status(400);
-                        const error = new Error (`endsoc must be integer`);
-                        return next (error);
-                }
 
 		//convert endsoc to integer
                 const numEndSoc = castType(endsoc, "integer");
@@ -126,17 +65,17 @@ const newSession = async (req, res, next) =>
                 if (numEndSoc < 0 || numEndSoc > 100)
                 {
                         res.status(400);
-                        const error = new Error (`end must be between 0 and 100`);
-                        return next (error);
+                        return next (new Error ("endsoc must be between 0 and 100"));
 		}
 
 		//check endsoc >= startsoc
                 if ( numStartSoc > numEndSoc )
                 {
                         res.status(400);
-                        const error = new Error (`startsoc must be less than or equal to endsoc`);
-                        return next (error);
+                        return next (new Error ("startsoc must be less than or equal to endsoc"));
                 }
+
+		
 
 		//success, return empty body
 		return res.status(200).json();
