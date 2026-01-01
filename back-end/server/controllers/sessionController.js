@@ -14,7 +14,7 @@ const newSession = async (req, res, next) =>
 		const { pointid, starttime, endtime, startsoc, endsoc, totalkwh, kwhprice, amount } = req.body;
 
 		//convert pointid to integer
-		const numChargerID = castType(pointid, "integer");
+		const numChargerID = castType(pointid, "number");
 
 		//check charger exists in database
 		if ((await Charger.getById(numChargerID)) == null )
@@ -24,7 +24,7 @@ const newSession = async (req, res, next) =>
 		}
 		
 		//extract valid start timestamp
-		const validStartTime = extractTimestamp(starttime);
+		const validStartTime = extractTimestamp(starttime) + ":00";
 
 		if ( validStartTime == null || !validateTimestamp(validStartTime) )
 		{
@@ -33,7 +33,7 @@ const newSession = async (req, res, next) =>
 		}
 
 		//extract valid end timestamp
-                const validEndTime = extractTimestamp(endtime);
+                const validEndTime = extractTimestamp(endtime) + ":00";
 
                 if ( validEndTime == null || !validateTimestamp(validEndTime) )
                 {
@@ -49,7 +49,7 @@ const newSession = async (req, res, next) =>
                 }
 
 		//convert startsoc to integer
-		const numStartSoc = castType(startsoc, "integer");
+		const numStartSoc = castType(startsoc, "number");
 
 		//startsoc must be between 0 and 100
 		if (numStartSoc < 0 || numStartSoc > 100)
@@ -59,7 +59,7 @@ const newSession = async (req, res, next) =>
 		}
 
 		//convert endsoc to integer
-                const numEndSoc = castType(endsoc, "integer");
+                const numEndSoc = castType(endsoc, "number");
 
 		//endsoc must be between 0 and 100
                 if (numEndSoc < 0 || numEndSoc > 100)
@@ -75,7 +75,16 @@ const newSession = async (req, res, next) =>
                         return next (new Error ("startsoc must be less than or equal to endsoc"));
                 }
 
+		//convert floats to strings
+		const totalkwh_str = (castType(totalkwh, "number")).toFixed(3);
+		const kwhprice_str = (castType(kwhprice, "number")).toFixed(3);
 		
+		//check correct math for amount
+		if ( ((castType(amount, "number")).toFixed(3)) != (totalkwh*kwhprice).toFixed(3) )
+		{
+			res.status(400);
+                        return next (new Error ("amount not equal to totalkwh * kwhprice"));
+		};
 
 		//success, return empty body
 		return res.status(200).json();

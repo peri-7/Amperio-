@@ -3,7 +3,7 @@ const castType = (x, type) =>
 {
 	switch(type)
 	{
-		case "integer":
+		case "number":
 			return Number(x);
 		default:
 			return null;
