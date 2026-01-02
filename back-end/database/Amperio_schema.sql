@@ -3,37 +3,19 @@ CREATE SCHEMA `amperio`;
 use amperio;
 
 
--- -----------------------------------------------------
--- Table Power
--- -----------------------------------------------------
-CREATE TABLE  Power (
-	power INT primary key
-);
-
-
-
--- -----------------------------------------------------
--- Table Connector
--- -----------------------------------------------------
-CREATE TABLE Connector (
-	connector_id INT AUTO_INCREMENT PRIMARY KEY,
-	connector_type VARCHAR(45) NOT NULL
-);
-
-
 
 -- -----------------------------------------------------
 -- Table Station
 -- -----------------------------------------------------
 CREATE TABLE Station (
-	station_id INT AUTO_INCREMENT PRIMARY KEY,
+	station_id INT PRIMARY KEY,
 	address VARCHAR(80),
 	longitude FLOAT NOT NULL,
 	latitude FLOAT NOT NULL,
 	postal_code INT,
 	facilities MEDIUMTEXT,
 	google_maps_link VARCHAR(255),
-	score FLOAT
+	score DECIMAL(2,1)
 );
 
 
@@ -43,17 +25,13 @@ CREATE TABLE Station (
 -- -----------------------------------------------------
 CREATE TABLE Charger (
 	charger_id INT PRIMARY KEY,
-	power INT NOT NULL,
-	connector_id INT NOT NULL,
+	power int NOT NULL,
+	connector_type enum('Type 2', 'CCS2', 'CHAdeMO', 'CCS1') NOT NULL,
 	station_id INT NOT NULL,
 	installed_at timestamp not null,
-	last_checked timestamp not null,
+	last_checked timestamp default current_timestamp null,
 	charger_status enum('available', 'charging', 'reserved', 'malfunction', 'offline') not null,
 	current_price decimal(5,3),
-	FOREIGN KEY (power) REFERENCES Power(power)
-	ON DELETE RESTRICT ON UPDATE CASCADE,
-	FOREIGN KEY (connector_id) REFERENCES Connector(connector_id)
-	ON DELETE RESTRICT ON UPDATE CASCADE,
 	FOREIGN KEY (station_id) REFERENCES Station(station_id)
 	ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -73,9 +51,8 @@ CREATE TABLE PricingHistory (
 	wholesale_price DECIMAL(5,3) NOT NULL,
 	final_price DECIMAL(5,3) NOT NULL,
 	FOREIGN KEY (charger_id) REFERENCES Charger(charger_id)
-	ON UPDATE CASCADE ON DELETE RESTRICT,
-	FOREIGN KEY (power) REFERENCES Power(power)
 	ON UPDATE CASCADE ON DELETE RESTRICT
+
 );
 
 
@@ -94,11 +71,10 @@ CREATE TABLE Users(
 	card_exp_date date,
 	card_cvv decimal(3,0),
 	-- ----------------------------
-	default_charger_power int,
+	default_charger_power INT,
 	created_at timestamp not null default current_timestamp,
-	role enum('user', 'admin') not null,
-	foreign key (default_charger_power) references Power(power)
-	on update cascade on delete restrict
+	role enum('user', 'admin') not null
+
 );
 
 
@@ -110,7 +86,7 @@ CREATE TABLE Reservation(
 	user_id int,
 	charger_id int,
 	reservation_start_time timestamp not null,
-	reservation_end_time timestamp not null,
+	reservation_end_time timestamp default current_timestamp not null,
 	foreign key (user_id) references Users(user_id)
 	on update cascade on delete restrict,
 	foreign key (charger_id) references Charger(charger_id)
@@ -128,7 +104,7 @@ CREATE TABLE Session(
 	-- each session corresponds to a charger
 	start_time TIMESTAMP NOT NULL,
 	-- start time of a session
-	end_time TIMESTAMP NOT NULL,
+	end_time TIMESTAMP default current_timestamp NOT NULL,
 	-- end time of a session, must be greater than start_time
 	start_soc INT NOT NULL CHECK (start_soc BETWEEN 0 AND 100),
 	-- battery percent of car at the start

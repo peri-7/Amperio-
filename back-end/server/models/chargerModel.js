@@ -67,6 +67,31 @@ class ChargerModel {
 		return result;
 	}
 
-}
+	  static async create(chargerData, connection) {
+        const query = `
+            INSERT INTO Charger (charger_id, power, connector_type, station_id, installed_at, last_checked, charger_status, current_price)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        const params = [
+            chargerData.charger_id,
+            chargerData.power,
+            chargerData.connector_type,
+            chargerData.station_id,
+            chargerData.installed_at,
+            chargerData.last_checked,
+            chargerData.charger_status,
+            chargerData.current_price
+        ];
+
+        return connection.query(query, params);
+    }
+           
+     static async deleteAll(connection) {
+        const query = "DELETE FROM Charger";
+        return connection.query(query);
+    }
+
+};
+
 
 module.exports = ChargerModel;

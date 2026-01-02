@@ -21,7 +21,6 @@ const searchStations = async (req, res, next) => {
                 END AS station_status
             FROM Station s
             LEFT JOIN Charger ch ON s.station_id = ch.station_id
-            LEFT JOIN Connector c ON ch.connector_id = c.connector_id
             WHERE 1=1
         `;
         let queryParams = [];
@@ -37,13 +36,13 @@ const searchStations = async (req, res, next) => {
         // 2. Power Filter
         if (power && power !== "" && power !== 'undefined') {
             queryParams.push(Number(power));
-            queryText += ` AND ch.power >= ?`;
+            queryText += ` AND ch.power = ?`;
         }
 
         // 3. Connector Filter
         if (connector && connector !== "" && connector !=='undefined') {
             queryParams.push(connector);
-            queryText += ` AND c.connector_type = ?`;
+            queryText += ` AND ch.connector_type = ?`;
         }
 
         // 4. Availability Filter

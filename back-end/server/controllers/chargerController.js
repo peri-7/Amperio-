@@ -4,7 +4,7 @@ const { parseUrlDate } = require('../utils/dateUtils');
 const { XMLParser } = require('fast-xml-parser');
 
 // Define the valid statuses based on your requirements
-const VALID_STATUSES = ['available', 'charging', 'reserved', 'offline', 'malfucntion'];
+const VALID_STATUSES = ['available', 'charging', 'reserved', 'offline', 'malfunction'];
 
 const getPoints = async (req, res, next) => {
     try {

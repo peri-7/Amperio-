@@ -1,11 +1,5 @@
 import "./StationDetails.css";
 
-const CONNECTOR_NAMES = {
-  1: 'Type 2',
-  2: 'CCS',
-  3: 'CHAdeMO',
-  4: 'Tesla Supercharger'
-};
 
 export default function StationDetails({ station, onClose }) {
 
@@ -36,7 +30,7 @@ export default function StationDetails({ station, onClose }) {
                   ⚡ {charger.power}kW
                 </strong>
                 <span style={{ fontSize: "0.9rem", color: "#666" }}>
-                  ({CONNECTOR_NAMES[charger.connector_id] || 'Unknown'})
+                  ({charger.connector_type || 'Unknown'})
                 </span>
                 <p className={`status ${charger.charger_status}`} style={{ fontWeight: "bold", marginTop: "5px" }}>
                   {charger.charger_status ? charger.charger_status.toUpperCase() : "UNKNOWN"}

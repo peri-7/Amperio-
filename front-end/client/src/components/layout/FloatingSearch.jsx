@@ -95,18 +95,18 @@ export default function FloatingSearch({ onSearch, filters,stations, onStationCl
           
           {openDropdown === 'power' && (
             <div className="dropdown-menu">
-              {options?.powers?.map((p,index) => (
+              {options?.powers?.map((p, index) => (
                 <button 
-                  key={p.power || index} 
-                  className={filters.power === p.power ? 'selected' : ''}
+                  key={index} // p is just a number (e.g., 50)
+                  className={filters.power === p ? 'selected' : ''}
                   onClick={() => {
-                    toggleFilter('power', p.power); // Use toggleFilter here
+                    toggleFilter('power', p); // Pass the number p directly
                     setOpenDropdown(null);
                   }}
                 > 
-                  {p.power} kW 
+                  {p} kW 
                 </button> 
-              ))}
+              ))} 
             </div>
           )}
         </div>
@@ -122,18 +122,18 @@ export default function FloatingSearch({ onSearch, filters,stations, onStationCl
           
           {openDropdown === 'connector' && (
             <div className="dropdown-menu">
-              {options?.connectors?.map((c,index) => (
-                <button 
-                  key={c.connector_id || `connector-${index}`} 
-                  className={filters.connector === c.connector_type ? 'selected' : ''}
-                  onClick={() => {
-                    toggleFilter('connector', c.connector_type); // Use toggleFilter here
-                    setOpenDropdown(null);
-                  }}
-                >
-                  {c.connector_type || 'Unknown Connector'}
-                </button>
-              ))}
+              {options?.connectors?.map((c, index) => (
+              <button 
+                key={index} // c is just a string (e.g., "CCS2")
+                className={filters.connector === c ? 'selected' : ''}
+                onClick={() => {
+                  toggleFilter('connector', c); // Pass the string c directly
+                  setOpenDropdown(null);
+                }}
+              >
+                {c}
+              </button>
+            ))}
             </div>
           )}
         </div>
