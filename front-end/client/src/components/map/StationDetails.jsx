@@ -15,8 +15,16 @@ export default function StationDetails({ station, onClose }) {
       <div className="station-drawer">
 
         <div className="drawer-header">
-          <h2>{station.address}</h2>
-          <button className="close-btn" onClick={onClose}>×</button>
+          <h2>{station.station_name || station.address}</h2>
+          {station.name && (
+            <p className="station-address" style={{ margin: 0, color: '#666' }}>{station.address}</p>
+          )}
+          {station.address && (
+           <p className="station-subtitle" style={{ margin: "4px 0 0 0", color: "#666", fontSize: "0.95rem" }}>
+          {station.address}
+          </p>
+           )}
+       <button className="close-btn" onClick={onClose}>×</button>
         </div>
 
         <p className="facilities">Facilities: {station.facilities}</p>

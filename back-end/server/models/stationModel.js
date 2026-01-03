@@ -39,6 +39,7 @@ class StationModel {
         // We need to format it so chargers are in an array.
         const station = {
             station_id: rows[0].station_id,
+            station_name: rows[0].station_name,
             address: rows[0].address,
             facilities: rows[0].facilities,
             lat: rows[0].latitude,
@@ -61,11 +62,12 @@ class StationModel {
 
     static async create(stationData, connection) {
         const query = `
-            INSERT INTO Station (station_id, address, longitude, latitude, postal_code, facilities, google_maps_link, score)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+            INSERT INTO Station (station_id, station_name, address, longitude, latitude, postal_code, facilities, google_maps_link, score)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const params = [
             stationData.station_id,
+            stationData.station_name,
             stationData.address,
             stationData.longitude,
             stationData.latitude,

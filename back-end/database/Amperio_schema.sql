@@ -9,6 +9,7 @@ use amperio;
 -- -----------------------------------------------------
 CREATE TABLE Station (
 	station_id INT PRIMARY KEY,
+	station_name VARCHAR(80),
 	address VARCHAR(80),
 	longitude FLOAT NOT NULL,
 	latitude FLOAT NOT NULL,

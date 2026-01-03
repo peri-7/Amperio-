@@ -37,6 +37,7 @@ const JsonToDb = (entry) => {
     // 3. Station Object
     const stationData = {
         station_id: entry.id,
+        station_name: entry.name,
         address: entry.address,
         longitude: entry.longitude,
         latitude: entry.latitude,

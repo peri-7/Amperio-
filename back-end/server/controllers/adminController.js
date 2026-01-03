@@ -57,6 +57,9 @@ const resetpoints = async (req, res, next) => {
     }
 };
 
+/*const addpoints = async (req, res, next) => {
+*/    
+
 module.exports = { resetpoints };
 
     
