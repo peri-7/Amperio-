@@ -84,15 +84,56 @@
 }
 
 .charger-card {
-  /*min-height: 56px;*/
   border: 1px solid #eee;
-  flex-direction: row; /* ensure content stays side-by-side*/
-  padding: 15px;
+  padding: 12px 15px;
   margin-top: 10px;
-  border-radius: 8px;
+  border-radius: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* Fixed height to match design while allowing content flex */
+  min-height: 60px; 
+}
+
+.charger-info-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.connector-name {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #1a1a1a;
+}
+
+.power-level {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* Connector icon sizing and wrapper */
+.connector-icon {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.03);
+  padding: 4px;
+}
+
+.connector-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .charger-list {
@@ -113,14 +154,59 @@
   font-size: 0.95rem;
 }
 
+/* Modern reserve button */
 .reserve-btn {
-  background: #5d0753;
-  color: white;
+  background: rgb(225, 211, 59);
+  color: #111;
   border: none;
   padding: 8px 12px;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(240,232,150,0.18);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.status.available { color: green; }
-.status.charging { color: red; }
+.reserve-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(240,232,150,0.22);
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  width: fit-content;
+  margin-top: 4px;
+}
+
+/* Color states */
+.status-pill.available {
+  background-color: #cff6dd;
+  color: #1e7e34;
+}
+
+.status-pill.charging {
+  background-color: #ffe5e5; /* light red */
+  color: #b30000; /* darker red text */
+  border: 1px solid rgba(179,0,0,0.12);
+}
+
+.status-pill.malfunction {
+  background-color: #111; /* black */
+  color: #fff;
+}
+
+.status-pill.offline {
+  background-color: #efefef; /* light grey */
+  color: #666;
+}
+
+
+.status-pill.reserved {
+  background-color: rgb(245, 238, 162); /* light grey */
+  color: rgb(193, 184, 84);
+  border: 1px solid rgb(193, 184, 84);
+}
