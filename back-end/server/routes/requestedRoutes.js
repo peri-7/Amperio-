@@ -13,7 +13,7 @@ router.get('/point/:id', chargerController.getPointDetails);
 router.post('/reserve/:id/:minutes', chargerController.reservePoint);
 router.post('/reserve/:id', chargerController.reservePoint);
 // d) enhmerwsh fortisth
-router.post('/udpoint/:id', chargerController.updatePoint);
+router.post('/updpoint/:id', chargerController.updatePoint);
 // e) katagrafh session
 router.post('/newsession', sessionMiddleware.validateNewSession, sessionController.newSession);
 // f) lista sessions
