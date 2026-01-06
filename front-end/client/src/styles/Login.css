@@ -1,0 +1,195 @@
+/* Login.css */
+
+/* 1. Reset default browser margins */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 2. Main Container - Map Palette Background */
+.login-container {
+  display: flex;
+  justify-content: center; 
+  align-items: center;     
+  width: 100vw;            
+  height: 100vh;           
+  
+  /* UPDATED: Gradient matching the map (Sage Green to Light Beige) */
+  background: linear-gradient(135deg, #c0bea0 0%, #F5F5DC 100%);
+  background-size: cover;  
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 3. The Glass Card */
+.glass-card {
+  /* UPDATED: Slightly more opaque white for light background */
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); /* Softer shadow */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  
+  padding: 3rem;
+  width: 100%;
+  max-width: 420px; 
+  
+  text-align: center;
+  color: #333333; /* UPDATED: Dark text for readability */
+}
+
+.glass-card h2 {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #2c3e50; /* Dark slate */
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #444444; /* Darker label */
+  font-weight: 600;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px; 
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1); /* Darker border */
+  background: rgba(255, 255, 255, 0.8); /* Brighter input background */
+  color: #333;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box; 
+  transition: 0.3s;
+}
+
+.input-group input:focus {
+  background: #ffffff;
+  border-color: #F3D55B; /* Map Yellow border on focus */
+  box-shadow: 0 0 0 3px rgba(243, 213, 91, 0.3); /* Yellow glow */
+}
+
+/* Placeholder color */
+.input-group input::placeholder {
+  color: #888;
+}
+
+/* --- Password Eye Icon --- */
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+.password-wrapper input {
+  padding-right: 40px; 
+}
+.toggle-password-btn {
+  position: absolute;
+  right: 10px;        
+  top: 50%;           
+  transform: translateY(-50%); 
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666; /* Darker icon color */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+.toggle-password-btn:hover {
+  color: #333;
+}
+
+/* --- Login Button (The Yellow from your image) --- */
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 1rem;
+  border-radius: 8px;
+  border: none;
+  
+  /* UPDATED: Map Yellow */
+  background: #F3D55B; 
+  color: #333333; /* Dark text on yellow */
+  
+  font-weight: bold;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background: #ecd055; /* Slightly darker yellow */
+}
+
+/* --- Back Button --- */
+.back-btn {
+  position: absolute; 
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+  
+  /* UPDATED: White background for contrast against map */
+  background: #F3D55B;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #333; /* Dark Text */
+  
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  z-index: 10; 
+}
+
+.back-btn:hover {
+  background: #ffffff;
+  color: #F3D55B;
+  border-color: #F3D55B;
+  transform: translateX(-3px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.back-btn svg {
+  stroke: currentColor;
+}
+
+/* --- Footer Links --- */
+.form-footer {
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.signup-link {
+  background: none;
+  border: none;
+  color: #2c3e50;
+  font-weight: 700; 
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  margin-left: 5px;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+
+.signup-link:hover {
+  color: #F3D55B; /* Yellow hover */
+}

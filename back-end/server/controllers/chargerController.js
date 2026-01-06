@@ -177,8 +177,10 @@ const getPrices = async (req, res, next) => {
         //get current date and time in required format YYYYMMDD0000
         const now = new Date();
         const year = now.getFullYear();
-        const month = now.getMonth() + 1;
-        const day = now.getDate();
+        let month = now.getMonth() + 1;
+        if (month < 10) month = `0${month}`;
+        let day = now.getDate();
+        if (day < 10) day = `0${day}`;
         const currentDateTime = `${year}${month}${day}0000`;
 
         //set up url parameters
