@@ -80,9 +80,9 @@ const newSession = async (req, res, next) =>
 		//convert floats to strings
 		const totalkwh_str = (castType(totalkwh, "number")).toFixed(3);
 		const kwhprice_str = (castType(kwhprice, "number")).toFixed(3);
-		
+	
 		//check correct math for amount
-		if ( ((castType(amount, "number")).toFixed(3)) != (totalkwh*kwhprice).toFixed(3) )
+		if (Math.round(amount*1000) !== Math.round((totalkwh*kwhprice)*1000))
 		{
 			res.status(400);
                         return next (new Error ("amount not equal to totalkwh * kwhprice"));
