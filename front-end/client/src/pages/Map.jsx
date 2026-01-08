@@ -1,4 +1,5 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect } from "react"; 
+import { AuthContext } from "../context/AuthContext"; 
 import FloatingSearch from "../components/layout/FloatingSearch"; 
 import BrandingIsland from "../components/layout/BrandingIsland";
 import UserIsland from "../components/layout/UserIsland";

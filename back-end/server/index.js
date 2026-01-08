@@ -19,6 +19,7 @@ const metaRoutes = require('./routes/metaRoutes');
 const requestedRoutes = require('./routes/requestedRoutes');
 const userStatsRoutes = require('./routes/userStatsRoutes');
 const reservationsRoutes = require('./routes/reservationsRoutes');
+const adminStatsRoutes = require('./routes/adminStatsRoutes');
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/station', stationRoutes);
 app.use('/api/reservations', reservationsRoutes);
 app.use('/api/userStats', userStatsRoutes);
+app.use('/api/adminStats', adminStatsRoutes);
 app.use('/api/entsoe', chargerRoutes);
 app.use('/api/meta',metaRoutes);
 // lame clownish goofy-ass mount

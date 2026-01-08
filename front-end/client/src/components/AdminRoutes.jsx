@@ -15,7 +15,7 @@ const AdminRoute = () => {
   if(loading) {
 	  return <div>Loading... </div>;
   }
-
+  
   // allow in only admins
   if(user?.role === 'admin') {
 	  return <Outlet />;
