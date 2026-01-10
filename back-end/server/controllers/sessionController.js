@@ -44,7 +44,7 @@ const newSession = async (req, res, next) =>
                 }
 
 		//start time after endtime
-		if ( validStartTime > validEndTime)
+		if ( validStartTime >= validEndTime)
 		{
 			res.status(400);
                         return next (new Error ("endtime cannot be before starttime"));
@@ -82,7 +82,7 @@ const newSession = async (req, res, next) =>
 		const kwhprice_str = (castType(kwhprice, "number")).toFixed(3);
 	
 		//check correct math for amount
-		if (Math.round(amount*1000) !== Math.round((totalkwh*kwhprice)*1000))
+		if (Math.round(amount*100) !== Math.round((totalkwh*kwhprice)*100))
 		{
 			res.status(400);
                         return next (new Error ("amount not equal to totalkwh * kwhprice"));

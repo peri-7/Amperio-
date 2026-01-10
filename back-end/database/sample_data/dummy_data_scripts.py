@@ -1,8 +1,11 @@
 import json
 import requests
+import sys
 from random import randint, uniform, choice
 from datetime import datetime, timedelta
 import calendar
+
+num_records = int(sys.argv[1])
 
 # ---------- Configuration ----------
 endpoint = "http://localhost:9876/api/newsession"  # <-- replace with your API
@@ -44,7 +47,7 @@ def generate_dummy_session(pointid):
         "kwhprice": kwhprice,
         "amount": amount
     }
-num_records = 10
+
 # ---------- Generate and POST ----------
 success_count = 0
 for i in range(num_records):

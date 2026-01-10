@@ -232,7 +232,7 @@ program
 			}
 			catch (err)
 			{
-				console.error("Error fetching points:", err.message);
+				console.error("Error fetching sessions:", err.message);
 			}
 		});
 
