@@ -3,3 +3,4 @@ node_modules/
 *.key
 *.cert
 .env
+GEMINI.md

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "../../styles/FacilitiesGrid.css";
 
 export default function FloatingSearch({ onSearch, filters,stations, onStationClick}) {
@@ -6,6 +6,19 @@ export default function FloatingSearch({ onSearch, filters,stations, onStationCl
   const [openDropdown, setOpenDropdown] = useState(null);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setOpenDropdown(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
 
   useEffect(()=> {
@@ -84,7 +97,7 @@ export default function FloatingSearch({ onSearch, filters,stations, onStationCl
           </ul>
         )}
       </div>
-      <div className="filter-pill-container">
+      <div className="filter-pill-container" ref={wrapperRef}>
 
 
         {/* Power Pill */}

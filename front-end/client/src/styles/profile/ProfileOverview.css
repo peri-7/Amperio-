@@ -46,6 +46,10 @@
 }
 
 /* --- KPI Cards Specifics --- */
+.kpi-card {
+  border-left: 5px solid #3498db; /* Blue for general stats */
+}
+
 .kpi-value {
   font-size: 2.5rem;
   font-weight: 700;
@@ -69,7 +73,7 @@
 
 /* --- Charger Power Card Specifics --- */
 .charger-power {
-  border-left: 5px solid #75a478; /* Updated to a Sage Green tone to match theme */
+  border-left: 5px solid #4cb817; /* Updated to a Sage Green tone to match theme */
 }
 
 .default-power {

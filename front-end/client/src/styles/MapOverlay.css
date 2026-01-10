@@ -182,6 +182,7 @@
     
     background: #FFFFFF;
     border: 1px solid transparent; /* Border only on hover */
+    outline: none !important; /* Remove focus ring */
     color: #000000;
     
     /* Padding: First number is Top/Bottom, Second is Left/Right */
