@@ -3,14 +3,15 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 // 1. Sign up
-const signup = async (req, res) => {
+const signup = async (req, res, next) => {
 	const { username, email, password } = req.body;
 
 	try {
 		// A. check if user exists
 		const existingUser = await User.findByIdentifier(email, username);
 		if (existingUser) {
-			return res.status(400).json({ message: 'User already exists' });
+			res.status(400);
+			return next(new Error('User already exists'));
 		}
 
 		// B. hash the password 
@@ -37,27 +38,28 @@ const signup = async (req, res) => {
 		});
 
 	} catch (err) {
-		console.error(err);
-		res.status(500).json({ message: 'Server error' });
+		next(err);
 	}
 };
 
 
 // 2. Login
-const login = async (req, res) => {
+const login = async (req, res, next) => {
 	const { identifier, password } = req.body;
 
 	try {
 		// A. find user by email or username
 		const user = await User.findByIdentifier(identifier, identifier);
 		if (!user) {
-			return res.status(400).json({ message: 'Invalid credentials' });
+			res.status(400);
+			return next(new Error('Invalid credentials'));
 		}
 
 		// B. compare the password sent vs the scrambled password in DB
 		const isMatch = await bcrypt.compare(password, user.safe_password);
 		if (!isMatch) {
-			return res.status(400).json({ message: 'Invalid credentials' });
+			res.status(400);
+			return next(new Error('Invalid credentials'));
 		}
 
 		// C. generate Token (The ID Card)
@@ -66,8 +68,7 @@ const login = async (req, res) => {
 
 		res.json({ token, user: { user_id: user.user_id, name: user.username, email: user.email, role: user.role } });
 	} catch (err) {
-		console.error(err);
-		res.status(500).json({ message: 'Server error' });
+		next(err);
 	}
 };
 

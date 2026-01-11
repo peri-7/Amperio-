@@ -126,7 +126,8 @@ const getStation = async (req,res,next) => {
         const station = await StationModel.getStationById(id);
 
         if(!station){
-            return res.status(404).json({message: "Station not found."});
+            res.status(404);
+            return next(new Error("Station not found."));
         }
 
         res.status(200).json(station);

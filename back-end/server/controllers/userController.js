@@ -2,39 +2,41 @@ const User = require('../models/userModel');
 const bcrypt = require('bcryptjs'); 
 
 
-const getUserProfile = async (req, res) => {
+const getUserProfile = async (req, res, next) => {
 	try {
 		const user_id = req.user_id;
 		const userInfo = await User.findByID(user_id);
 
 		if(!userInfo) {
-			return res.status(404).json({ message: "User not found" });
+			res.status(404);
+			return next(new Error("User not found"));
 		}
 
 
 		res.status(200).json(userInfo);
 	} catch (error) {
-		res.status(500).json({ message: "Error fetching data" });
+		next(error);
 	}
 };
 
-const getUserData = async (req, res) => {
+const getUserData = async (req, res, next) => {
 	try {
 		const user_id = req.user_id;
 		const userInfo = await User.findByID(user_id);
 
 		if(!userInfo) {
-			return res.status(404).json({ message: "User not found" });
+			res.status(404);
+			return next(new Error("User not found"));
 		}
 
 		const { default_charger_power, ...userData } = userInfo;
 		res.status(200).json(userData);
 	} catch (error) {
-		res.status(500).json({ message: "Error fetching data" });
+		next(error);
 	}
 };
 
-const updateUserProfile = async (req, res) => {
+const updateUserProfile = async (req, res, next) => {
 	try {
 		const user_id = req.user_id;
 		const { username, email, default_charger_power, default_connector_type, password } = req.body;
@@ -57,7 +59,8 @@ const updateUserProfile = async (req, res) => {
 		}
 
 		if (Object.keys(updates).length === 0) {
-            return res.status(400).json({ message: "No changes provided" });
+            res.status(400);
+			return next(new Error("No changes provided"));
         }
 
 		await User.update(user_id, updates);
@@ -65,8 +68,7 @@ const updateUserProfile = async (req, res) => {
 		res.status(200).json({ message: "Profile updated successfully" });
 
 	} catch (error) {
-		console.error("Error updating profile:", error);
-		res.status(500).json({ message: "Error updating profile" });
+		next(error);
 	}
 };
 

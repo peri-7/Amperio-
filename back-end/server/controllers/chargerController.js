@@ -40,10 +40,9 @@ const getPointDetails = async (req, res, next) => {
         // 1. Fetch data
         const point = await Charger.getById(id);
 
-        // 2. Handle 404 - Not Found
+        // 2. Handle 204 - Not Found
         if (!point) {
-            res.status(404);
-            return next(new Error(`Point with ID ${id} not found`));
+		res.status(204).json(point);
         }
 
         // 3. Format the date using your existing utility
@@ -200,7 +199,7 @@ const getPrices = async (req, res, next) => {
         //currently the prices are returned in a list so prices[0] is 23:00-23:15 in UTC time which is 
         //actually the price for 01:00-01:15 in Greece local time (UTC+2)
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 };
 
