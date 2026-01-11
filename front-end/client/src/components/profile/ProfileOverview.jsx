@@ -13,6 +13,8 @@ const ProfileOverview = ({ profile}) => {
 		totalEnergy: 0
 		});
 	const power = profile.default_charger_power;
+	const connector = profile.default_connector_type;
+	console.log("Profile Data:", profile);
 	const [upcoming, setUpcoming] = useState(null);
 
 	useEffect(() => {
@@ -56,7 +58,7 @@ const ProfileOverview = ({ profile}) => {
 			</div>
 			<div className="kpi-card">
 				<h3>Energy</h3>
-				<p className="kpi-value">{kpis.totalEnergy} kWh</p>
+				<p className="kpi-value">{kpis.totalEnergy || 0} kWh</p>
 			</div>
 
 			
@@ -79,6 +81,14 @@ const ProfileOverview = ({ profile}) => {
 				<h3>Default Charger Power</h3>
 				{power ? (
 					<p className="default-power">{power} kW</p>
+				) : (
+				<p className="default-power"> - </p>
+				)}
+			</div>
+			<div className="charger-power">
+				<h3>Default Connector Type</h3>
+				{connector ? (
+					<p className="default-power">{connector}</p>
 				) : (
 				<p className="default-power"> - </p>
 				)}

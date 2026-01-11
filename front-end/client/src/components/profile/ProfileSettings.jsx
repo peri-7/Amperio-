@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../../axiosConfig";
 import "../../styles/profile/ProfileSettings.css";
 
@@ -7,12 +7,34 @@ const ProfileSettings = ({ profile }) => {
         username: profile.username || "",
         email: profile.email || "",
         default_charger_power: profile.default_charger_power || "",
+        default_connector_type: profile.default_connector_type || "",
         newPassword: "",
         confirmPassword: ""
     });
 
     const [status, setStatus] = useState({ type: "", message: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [powerOptions, setPowerOptions] = useState([]);
+    const [connectorOptions, setConnectorOptions] = useState([]);
+    
+    // Password visibility states
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    useEffect(() => {
+        const fetchOptions = async () => {
+            try {
+                const res = await api.get("/meta/filters");
+                if (res.data) {
+                    if (res.data.powers) setPowerOptions(res.data.powers);
+                    if (res.data.connectors) setConnectorOptions(res.data.connectors);
+                }
+            } catch (err) {
+                console.error("Error fetching filter options", err);
+            }
+        };
+        fetchOptions();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -25,6 +47,19 @@ const ProfileSettings = ({ profile }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setStatus({ type: "", message: "" });
+
+        // Check for changes
+        const hasChanges = 
+            formData.username !== (profile.username || "") ||
+            formData.email !== (profile.email || "") ||
+            formData.default_charger_power.toString() !== (profile.default_charger_power || "").toString() ||
+            formData.default_connector_type !== (profile.default_connector_type || "") ||
+            formData.newPassword !== "";
+
+        if (!hasChanges) {
+            setStatus({ type: "info", message: "No changes were made." });
+            return;
+        }
 
         // Basic validation
         if (formData.newPassword && formData.newPassword !== formData.confirmPassword) {
@@ -39,7 +74,8 @@ const ProfileSettings = ({ profile }) => {
             const payload = {
                 username: formData.username,
                 email: formData.email,
-                default_charger_power: formData.default_charger_power
+                default_charger_power: formData.default_charger_power,
+                default_connector_type: formData.default_connector_type
             };
 
             if (formData.newPassword) {
@@ -57,6 +93,9 @@ const ProfileSettings = ({ profile }) => {
                 newPassword: "",
                 confirmPassword: ""
             }));
+            // Reset visibility
+            setShowNewPassword(false);
+            setShowConfirmPassword(false);
 
         } catch (err) {
             console.error("Error updating profile", err);
@@ -73,76 +112,139 @@ const ProfileSettings = ({ profile }) => {
                 <div className="settings-section">
                     <h3>Personal Information</h3>
                     
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
-                        <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            value={formData.username}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="username">Username</label>
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                value={formData.username}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
 
-                    <div className="form-group">
-                        <label htmlFor="email">Email Address</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
+                        <div className="form-group">
+                            <label htmlFor="email">Email Address</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
                     </div>
                 </div>
 
                 <div className="settings-section">
-                    <h3>Charging Preferences</h3>
+                    <h3>Default Preferences</h3>
                     
-                    <div className="form-group">
-                        <label htmlFor="default_charger_power">Default Charger Power (kW)</label>
-                        <input
-                            type="number"
-                            id="default_charger_power"
-                            name="default_charger_power"
-                            value={formData.default_charger_power}
-                            onChange={handleChange}
-                            placeholder="e.g. 50"
-                            step="0.1"
-                        />
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="default_charger_power">Default Charger Power (kW)</label>
+                            <select
+                                id="default_charger_power"
+                                name="default_charger_power"
+                                value={formData.default_charger_power}
+                                onChange={handleChange}
+                            >
+                                <option value="">Select power</option>
+                                {powerOptions.map((power) => (
+                                    <option key={power} value={power}>{power} kW</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="default_connector_type">Default Connector Type</label>
+                            <select
+                                id="default_connector_type"
+                                name="default_connector_type"
+                                value={formData.default_connector_type}
+                                onChange={handleChange}
+                            >
+                                <option value="">Select a connector</option>
+                                {connectorOptions.map((connector) => (
+                                    <option key={connector} value={connector}>{connector}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
                 </div>
 
                 <div className="settings-section">
                     <h3>Security</h3>
-                    <div className="form-group">
-                        <label htmlFor="newPassword">New Password (Leave blank to keep current)</label>
-                        <input
-                            type="password"
-                            id="newPassword"
-                            name="newPassword"
-                            value={formData.newPassword}
-                            onChange={handleChange}
-                            placeholder="••••••••"
-                        />
-                    </div>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="newPassword">New Password <small>(Leave blank to keep)</small></label>
+                            <div className="password-wrapper">
+                                <input
+                                    type={showNewPassword ? "text" : "password"}
+                                    id="newPassword"
+                                    name="newPassword"
+                                    value={formData.newPassword}
+                                    onChange={handleChange}
+                                    placeholder="••••••••"
+                                />
+                                <button 
+                                    type="button"
+                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                    className="toggle-password-btn"
+                                    aria-label={showNewPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showNewPassword ? (
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    ) : (
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
 
-                    {formData.newPassword && (
                         <div className="form-group">
                             <label htmlFor="confirmPassword">Confirm New Password</label>
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                placeholder="••••••••"
-                                required
-                            />
+                            <div className="password-wrapper">
+                                <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    placeholder="••••••••"
+                                    required={!!formData.newPassword}
+                                    disabled={!formData.newPassword}
+                                />
+                                <button 
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="toggle-password-btn"
+                                    disabled={!formData.newPassword}
+                                    aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showConfirmPassword ? (
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    ) : (
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                    )}
+                                </button>
+                            </div>
                         </div>
-                    )}
+                    </div>
                 </div>
 
                 <button type="submit" className="btn-save" disabled={isSubmitting}>

@@ -91,6 +91,14 @@ const ProfileStats = () => {
 
   if (loading) return <div className="loading-screen">Loading...</div>;
 
+  if (statsData.monthly.length === 0) {
+    return (
+      <div className="no-stats-container">
+        <p className="no-stats-message">Start charging and comeback to check your activity</p>
+      </div>
+    );
+  }
+
   return (
     <div className="stats-grid">
       {/* 1. Money/month chart */}
