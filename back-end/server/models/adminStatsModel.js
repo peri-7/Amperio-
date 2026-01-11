@@ -60,6 +60,52 @@ class AdminStatsModel {
         return rows;
     }
 
+        static async GetChargerList() {
+        const sql = `
+            SELECT c.charger_id, s.station_name 
+            FROM Charger c 
+            JOIN Station s ON c.station_id = s.station_id
+        `;
+        const [rows] = await db.execute(sql);
+        return rows;
+    }
+
+    static async ChargerHealthUptime(chargerId) {
+        // Logic: Calculate total duration and subtract duration where state was 'malfunction' or 'offline'
+        const sql = `
+            WITH StatusDurations AS (
+                SELECT 
+                    new_state,
+                    time_ref,
+                    LEAD(time_ref) OVER (PARTITION BY charger_id ORDER BY time_ref) as next_time
+                FROM ChargerStatusHistory
+                WHERE charger_id = ?
+            )
+            SELECT 
+                new_state as status,
+                SUM(TIMESTAMPDIFF(SECOND, time_ref, IFNULL(next_time, NOW()))) as total_seconds
+            FROM StatusDurations
+            GROUP BY new_state
+        `;
+        const [rows] = await db.execute(sql, [chargerId]);
+        return rows;
+    }
+
+    static async ChargerFailures(chargerId) {
+        // Logic: Count 'malfunction' entries per month for the selected charger
+        const sql = `
+            SELECT 
+                DATE_FORMAT(time_ref, '%b %Y') as month_label,
+                COUNT(*) as failure_count
+            FROM ChargerStatusHistory
+            WHERE charger_id = ? AND new_state = 'malfunction'
+            GROUP BY YEAR(time_ref), MONTH(time_ref), month_label
+            ORDER BY YEAR(time_ref), MONTH(time_ref)
+        `;
+        const [rows] = await db.execute(sql, [chargerId]);
+        return rows;
+    }
+
 };
 
     module.exports = AdminStatsModel;

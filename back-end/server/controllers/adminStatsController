@@ -4,29 +4,46 @@ class chartData {
     static async chartData(req, res, next) {
         try {
             const range = parseInt(req.query.range) || 12;
+            const chargerId = req.query.chargerId || null;
 
+            // Fetch the global data and the list of chargers
             const [
                 monthlyFinance, 
                 stationRevenue, 
                 energyHeatmap, 
-                powerEfficiency
+                powerEfficiency,
+                chargerList
             ] = await Promise.all([
                 AdminStatsModel.MonthlyFinancial(range),
                 AdminStatsModel.RevenueByStation(),
                 AdminStatsModel.EnergyDemandHeatmap(), 
-                AdminStatsModel.PowerEfficiency()   
+                AdminStatsModel.PowerEfficiency(),
+                AdminStatsModel.GetChargerList()
             ]);
 
+            // Fetch specific health data if a charger is selected
+            let healthUptime = [];
+            let failureHistory = [];
+            
+            if (chargerId) {
+                [healthUptime, failureHistory] = await Promise.all([
+                    AdminStatsModel.ChargerHealthUptime(chargerId),
+                    AdminStatsModel.ChargerFailures(chargerId)
+                ]);
+            }
 
             res.status(200).json({
-                status:"OK",
+                status: "OK",
                 data: {
                     monthlyFinance,
                     stationRevenue,
                     energyHeatmap,   
-                    powerEfficiency  
-                }}
-            );
+                    powerEfficiency,
+                    chargerList, // Sent so the frontend can populate a dropdown
+                    healthUptime,
+                    failureHistory
+                }
+            });
 
         } catch (error) {
             next(error);
