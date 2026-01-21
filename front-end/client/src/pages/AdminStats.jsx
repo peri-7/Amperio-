@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import FinancialTab from '../components/admin/FinancialStats';
 import EnergyTab from '../components/admin/EnergyStats';
-import ChargerTab from '../components/admin/ChargerStats'; // New Component
+import ChargerTab from '../components/admin/ChargerStats'; 
+import UserTab from '../components/admin/UserStats';
 import api from "../axiosConfig"; 
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -30,7 +31,9 @@ const AdminStats = () => {
     powerEfficiency: [],
     chargerList: [],
     healthUptime: [],
-    failureHistory: []
+    failureHistory: [],
+    userGrowth: [],
+    returningUsers: []
   });
 
   const handleLogout = () => {
@@ -118,7 +121,7 @@ const AdminStats = () => {
           />
         )}
 
-        {activeTab === 'user' && <PlaceholderTab name="User" />}
+        {activeTab === 'user' && <UserTab data={data} />}
       </main>
     </div>
   );

@@ -106,6 +106,36 @@ class AdminStatsModel {
         return rows;
     }
 
+    static async GetUserGrowth(monthsLimit = 12) {
+        const sql = `
+            SELECT 
+                DATE_FORMAT(created_at, '%b %Y') AS month_label, 
+                COUNT(user_id) AS new_registrations
+            FROM Users
+            WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? MONTH)
+            GROUP BY YEAR(created_at), MONTH(created_at), month_label
+            ORDER BY YEAR(created_at), MONTH(created_at)
+        `;
+        const [rows] = await db.execute(sql, [monthsLimit]);
+        return rows;
+    }
+    
+    static async GetReturningUsers(monthsLimit = 12) {
+        const sql = `
+            SELECT 
+                DATE_FORMAT(s.start_time, '%b %Y') AS month_label,
+                COUNT(DISTINCT s.user_id) AS returning_user_count
+            FROM Session s
+            JOIN Users u ON s.user_id = u.user_id
+            WHERE s.start_time >= DATE_SUB(NOW(), INTERVAL ? MONTH)
+              AND DATE_FORMAT(s.start_time, '%Y-%m') > DATE_FORMAT(u.created_at, '%Y-%m')
+            GROUP BY YEAR(s.start_time), MONTH(s.start_time), month_label
+            ORDER BY YEAR(s.start_time), MONTH(s.start_time)
+        `;
+        const [rows] = await db.execute(sql, [monthsLimit]);
+        return rows;
+    }
+
 };
 
     module.exports = AdminStatsModel;

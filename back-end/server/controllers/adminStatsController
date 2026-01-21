@@ -12,13 +12,17 @@ class chartData {
                 stationRevenue, 
                 energyHeatmap, 
                 powerEfficiency,
-                chargerList
+                chargerList,
+                userGrowth,      // Added: Monthly new signups
+                returningUsers
             ] = await Promise.all([
                 AdminStatsModel.MonthlyFinancial(range),
                 AdminStatsModel.RevenueByStation(),
                 AdminStatsModel.EnergyDemandHeatmap(), 
                 AdminStatsModel.PowerEfficiency(),
-                AdminStatsModel.GetChargerList()
+                AdminStatsModel.GetChargerList(),
+                AdminStatsModel.GetUserGrowth(range),
+                AdminStatsModel.GetReturningUsers(range)
             ]);
 
             // Fetch specific health data if a charger is selected
@@ -41,7 +45,9 @@ class chartData {
                     powerEfficiency,
                     chargerList, // Sent so the frontend can populate a dropdown
                     healthUptime,
-                    failureHistory
+                    failureHistory,
+                    userGrowth,  
+                    returningUsers
                 }
             });
 
