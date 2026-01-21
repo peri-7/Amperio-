@@ -315,9 +315,14 @@
     pointer-events: auto !important; /* Forces clickability */
     
     /* Visual styles */
-    background: #fff;
+    
+background-color: #FFFFFF;
+    border: 1px solid transparent;
+    color: #FF0000;
+    border-color: #ff0000;
+   /* background: #fff;
     border: 1px solid #ff4d4f;
-    color: #ff4d4f;
+    color: #ff4d4f; */
     padding: 6px 14px;
     border-radius: 20px;
     font-size: 13px;
@@ -325,8 +330,10 @@
 }
 
 .clear-filters-btn:hover {
-    background: #fff1f0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: #ff0000;
+    color: #ffffff;
+    border-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(ff,ff,ff,0.1);
 }
 
 /* The clear link inside the dropdown menu 

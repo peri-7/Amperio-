@@ -6,7 +6,17 @@ const program = new Command();
 import { stringify } from "csv-stringify/sync";
 import FormData from "form-data";
 import fs from "fs";
-const API_BASE = "http://localhost:9876/api"; // your API URL
+import https from "https";
+
+const API_BASE = "https://localhost:9876/api"; // Updated to HTTPS
+
+// Create a custom axios instance that ignores self-signed certs
+const api = axios.create({
+  baseURL: API_BASE,
+  httpsAgent: new https.Agent({  
+    rejectUnauthorized: false 
+  })
+});
 
 program
 	.name("se2519")
@@ -25,7 +35,7 @@ program
 		{
 			try 
 			{
-				const res = await axios.get(`${API_BASE}/admin/healthcheck`);
+				const res = await api.get(`/admin/healthcheck`);
 				console.log((res.data));
 			} 
 			catch (err) 
@@ -39,7 +49,7 @@ program
 	.description("reset charging station points from file in system")
 	.action(async () => {
 		try {
-			const res = await axios.post(`${API_BASE}/admin/resetpoints`);
+			const res = await api.post(`/admin/resetpoints`);
 			console.log(res.data);
 		} catch (err) {
 			console.error("Error with reset:", err.message);
@@ -60,7 +70,7 @@ program
 		});
 
 		// 2. POST request
-		const res = await axios.post(`${API_BASE}/admin/addpoints`, form, {
+		const res = await api.post(`/admin/addpoints`, form, {
 			headers: {
 				...form.getHeaders()
 			}
@@ -87,7 +97,7 @@ program
 					params.status = opts.status;
 				}
 
-				const res = await axios.get(`${API_BASE}/points`, { params } );
+				const res = await api.get(`/points`, { params } );
 
 				res.data.sort((a, b) => b.pointid - a.pointid);
 
@@ -112,7 +122,7 @@ program
 		{
 			try
 			{
-				const res = await axios.get(`${API_BASE}/point/${opts.id}`);
+				const res = await api.get(`/point/${opts.id}`);
 
 				console.log(res.data);
 			}
@@ -130,8 +140,8 @@ program
 	.action(async (opts) => {
 		try 
 		{
-			const url = opts.minutes ? `${API_BASE}/reserve/${opts.id}/${opts.minutes}` : `${API_BASE}/reserve/${opts.id}`;
-			const res = await axios.post(url);
+			const url = opts.minutes ? `/reserve/${opts.id}/${opts.minutes}` : `/reserve/${opts.id}`;
+			const res = await api.post(url);
 			console.log(res.data);
 		} 
 		catch (err) 
@@ -164,7 +174,7 @@ program
 				params.kwhprice = opts.price;
 			}
 
-			const res = await axios.post(`${API_BASE}/updpoint/${opts.id}`, params );
+			const res = await api.post(`/updpoint/${opts.id}`, params );
 
 			console.log(res.data);
 		} 
@@ -198,7 +208,7 @@ program
 				"amount" : opts.amount
 			};
 
-			const res = await axios.post(`${API_BASE}/newsession`, params );
+			const res = await api.post(`/newsession`, params );
 
 			console.log(res.data);
 		}
@@ -219,7 +229,7 @@ program
 		{
 			try
 			{
-				const res = await axios.get(`${API_BASE}/sessions/${opts.id}/${opts.from}/${opts.to}`);
+				const res = await api.get(`/sessions/${opts.id}/${opts.from}/${opts.to}`);
 
 				res.data.sort((a, b) => b.starttime - a.starttime);
 
