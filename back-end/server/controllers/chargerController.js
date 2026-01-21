@@ -37,12 +37,22 @@ const getPointDetails = async (req, res, next) => {
     try {
         const { id } = req.params;
 
+        // Validate that id is a valid integer
+        if (!/^\d+$/.test(id)) {
+            res.status(400);
+            return next(new Error('Point ID must be a valid integer.'));
+        }
+
         // 1. Fetch data
         const point = await Charger.getById(id);
+        
+        // Prevent browser caching
+        res.setHeader('Cache-Control', 'no-cache');
 
-        // 2. Handle 204 - Not Found
+        // 2. Handle 404 - Not Found
         if (!point) {
-		res.status(204).json(point);
+            res.status(404);
+            return next(new Error(`Point with ID ${id} not found`));
         }
 
         // 3. Format the date using your existing utility

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import api from "../../axiosConfig";
 import "../../styles/FacilitiesGrid.css";
 
 export default function FloatingSearch({ onSearch, filters, stations, onStationClick }) {
@@ -47,11 +48,25 @@ export default function FloatingSearch({ onSearch, filters, stations, onStationC
   };
 
   useEffect(() => {
-    // FIX: Added // to the URL
-    fetch('http://localhost:9876/api/meta/filters')
-      .then(res => res.json())
-      .then(data => { console.log("Data from backend:", data); setOptions(data) })
-      .catch(err => console.error("Metadata fetch failed:", err));
+    const fetchFilterOptions = async () => {
+      try {
+        const response = await api.get('/meta/filters');
+        const data = response.data;
+        // Defensive check: ensure the data is an object and provide defaults
+        setOptions({
+          powers: data?.powers || [],
+          connectors: data?.connectors || [],
+          facilities: data?.facilities || [],
+          score: data?.score || [],
+        });
+      } catch (err) {
+        console.error("Metadata fetch failed:", err);
+        // In case of error, ensure options are reset to empty arrays
+        setOptions({ connectors: [], powers: [], facilities: [], score: [] });
+      }
+    };
+
+    fetchFilterOptions();
   }, []);
 
   const toggleFilter = (key, value) => {
