@@ -4,8 +4,8 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const cron = require('node-cron');
-require('dotenv').config();
 const daemon = require('./utils/daemon.js');
+require('dotenv').config();
 
 
 // import error-handling middleware
@@ -83,6 +83,12 @@ if (USE_HTTPS) {
 //Schedule the price fetching at 1:00 every day
 cron.schedule('0 1 * * *', async () => {
     let prices = await daemon.getPrices();
+    while (!prices) {
+        console.log("Failed to fetch prices from ENTSOE.");
+        cron.schedule('0 * * * *', async () => {
+            prices = await daemon.getPrices();
+        });
+    }
     await daemon.savePriceList(prices);
 });
 

@@ -32,39 +32,44 @@ const getPrices = async (req, res, next) => {
         const parser = new XMLParser();
         const parsedResult = parser.parse(xmlText);
 
-        //Parse the XML response
-        const rawPoints = [].concat(parsedResult.Publication_MarketDocument.TimeSeries.Period.Point);
-        rawPoints.sort((a, b) => Number(a.position) - Number(b.position));
+        //Try parsing the XML response assuming ENTSOE API is working
+        try{
+            const rawPoints = [].concat(parsedResult.Publication_MarketDocument.TimeSeries.Period.Point);
+            rawPoints.sort((a, b) => Number(a.position) - Number(b.position));
 
-        const prices = [];
-        let lastPosition = null;
-        let lastPrice = null;
+            const prices = [];
+            let lastPosition = null;
+            let lastPrice = null;
 
-        rawPoints.forEach(p => {
-            const currentPos = Number(p.position);
-            const currentPrice = Number(p['price.amount']);
+            rawPoints.forEach(p => {
+                const currentPos = Number(p.position);
+                const currentPrice = Number(p['price.amount']);
 
-            //If this is not the first item, check for gaps
-            if (lastPosition !== null) {
+                //If this is not the first item, check for gaps
+                if (lastPosition !== null) {
 
-                //Calculate missing points
-                const gapSize = currentPos - lastPosition - 1;
+                    //Calculate missing points
+                    const gapSize = currentPos - lastPosition - 1;
 
-                if (gapSize > 0) {
-                    //Fill gaps with last known price
-                    for (let i = 0; i < gapSize; i++) {
-                        prices.push(lastPrice);
+                    if (gapSize > 0) {
+                        //Fill gaps with last known price
+                        for (let i = 0; i < gapSize; i++) {
+                            prices.push(lastPrice);
+                        }
                     }
                 }
-            }
-            
-            prices.push(currentPrice);
+                
+                prices.push(currentPrice);
 
-            lastPosition = currentPos;
-            lastPrice = currentPrice;
-        });
+                lastPosition = currentPos;
+                lastPrice = currentPrice;
+            });
 
-        return prices;
+            return prices;
+        } catch (err) {
+            console.log("Error parsing ENTSOE response, possibly due to API issues:", err);
+            return null;
+        }
         //currently the prices are returned in a list so prices[0] is 23:00-23:15 in UTC time which is 
         //actually the price for 01:00-01:15 in Greece local time (UTC+2)
 
@@ -122,7 +127,7 @@ const updateChargerPointPrices = async () => {
 
     //Get current price converted to KWh
     const current_price = Number((await fetchCurrentPrice() / 1000).toFixed(3));
-    if (current_price != null) {
+    if (!current_price) {
         let chargers = await Charger.getAllChargers();
 
         chargers.forEach(async c => {
