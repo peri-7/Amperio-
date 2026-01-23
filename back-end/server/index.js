@@ -81,11 +81,11 @@ if (USE_HTTPS) {
 }
 
 //Schedule the price fetching at 1:00 every day
-cron.schedule('31 21 * * *', async () => {
+cron.schedule('0 1 * * *', async () => {
     let prices = await daemon.getPrices();
     await daemon.savePriceList(prices);
 });
 
-cron.schedule('*/1 * * * *', async () => {
+cron.schedule('*/15 * * * *', async () => {
     await daemon.updateChargerPointPrices();
 });
