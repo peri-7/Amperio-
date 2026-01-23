@@ -27,7 +27,7 @@ class StationModel {
     static async getStationById(id) {
         // We join the Station and Charger tables
         const query = `
-            SELECT s.*, c.charger_id, c.power, c.charger_status, c.connector_type
+            SELECT s.*, c.charger_id, c.power, c.charger_status, c.connector_type, c.current_price
             FROM Station s
             LEFT JOIN Charger c ON s.station_id = c.station_id
             WHERE s.station_id = ?
@@ -43,14 +43,16 @@ class StationModel {
             station_name: rows[0].station_name,
             address: rows[0].address,
             facilities: rows[0].facilities,
-            lat: rows[0].latitude,
-            lng: rows[0].longitude,
+            latitude: rows[0].latitude,
+            longitude: rows[0].longitude,
             score: rows[0].score,
+            google_maps_link: rows[0].google_maps_link,
             chargers: rows.filter(r => r.charger_id !== null).map(r => ({
                 charger_id: r.charger_id,
                 power: r.power,
                 charger_status: r.charger_status,
-                connector_type: r.connector_type
+                connector_type: r.connector_type,
+                current_price: r.current_price
             }))
         };
 

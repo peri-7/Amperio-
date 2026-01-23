@@ -9,13 +9,31 @@
   z-index: 1001; /* Above Leaflet (1000) */
 }
 
+.google-maps-link a {
+  color: #0e448a;
+  text-decoration: none;
+  font-weight: 600;
+}
+.facilities, .google-maps-link {
+  margin: 2px 0; /* Adjust the 4px to your preferred tightness */
+  line-height: 1; /* Tighter line spacing */
+}
+
+.google-maps-link {
+  margin-bottom: 4px; /* Small gap before the charger list starts */
+}
+
+.google-maps-link a:hover {
+  text-decoration: underline;
+}
+
 /* The Side Rectangle */
 .station-drawer {
   top: 70px; /* Ensure this is below your Navbar */
   position: fixed;
   left: 20px; /* Floating on the right */
   bottom: 20px;
-  width: 380px;
+  width: 400px;
   background: #c6def1;
   z-index: 1002;
   border-radius: 12px;
@@ -271,4 +289,27 @@
   font-weight: 600;
   color: #444;         /* Subtle dark grey for the text */
   padding-top: 2px;    /* Slight alignment tweak */
+}
+
+.specs-line {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between kW, dot, and Price */
+  margin-bottom: 4px;
+}
+
+.power-level {
+  color: #666; /* Subtle grey for technical specs */
+  font-size: 0.8rem;
+}
+
+.separator {
+  color: #999;
+  font-weight: bold;
+}
+
+.price-tag {
+  font-weight: 700; /* Bold to make it a Primary Decision Factor */
+  color: #222;    /* Darker than the power level for contrast */
+  font-size: 0.85rem;
 }

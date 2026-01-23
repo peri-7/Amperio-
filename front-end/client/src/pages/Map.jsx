@@ -13,6 +13,7 @@ export default function Map() {
   const [selectedStation, setSelectedStation] = useState(null);
   const [stations, setStations] = useState([]); /*this stores the filtered station list*/
   const { user } = useContext(AuthContext);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
 
   useEffect(() => {
     const fetchStations = async () => {
@@ -58,17 +59,23 @@ export default function Map() {
       const response = await api.get(`/station/search`, { params: cleanedFilters });
       setStations(response.data); /* we update the stations, which are handled by mapview.jsx*/
     } catch (error) {
-        console.error("Server Error:", error.response ? error.response.status : error.message);
+      console.error("Server Error:", error.response ? error.response.status : error.message);
     }
   };
 
 
   const handleMarkerClick = async (station) => {
+    setSelectedStation(station);
+    setSidebarVisible(false);
     try {
       const res = await api.get(`/station/${station.station_id}`);
-      setSelectedStation(res.data);
+      setTimeout(() => {
+        setSelectedStation(res.data);
+        setSidebarVisible(true);
+      }, 2000);
     } catch (err) {
       console.error("Error fetching details:", err);
+      setSelectedStation(null);
     }
   };
 
@@ -84,13 +91,16 @@ export default function Map() {
         </div>
 
         {/* the map */}
-        <MapView stations={stations} onStationClick={handleMarkerClick} />
+        <MapView stations={stations} onStationClick={handleMarkerClick} selectedStation={selectedStation} />
 
         {/* The Sliding Side Block & Overlay */}
-        {selectedStation && ( //when selected station becomes not null, the side block opens
+        {selectedStation && sidebarVisible && (
           <StationDetails
-            station={selectedStation}  //we pass the data into the sidebar to show it
-            onClose={() => setSelectedStation(null)}
+            station={selectedStation}
+            onClose={() => {
+              setSelectedStation(null);
+              setSidebarVisible(false);
+            }}
           />
         )}
       </div>

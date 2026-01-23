@@ -1,8 +1,33 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { getMarkerIcon } from "../../utils/mapIcons";
+import { useEffect } from "react";
 
+//zooming on selected station
+function SetViewOnStation({ selectedStation }) {
+  const map = useMap();
+  
+  useEffect(() => {
+    if (selectedStation?.latitude && selectedStation?.longitude) {
+      //zoom in
+      map.flyTo(
+        [selectedStation.latitude, selectedStation.longitude], 
+        16, 
+        { animate: true, duration: 1.8 }
+      );
+    } else if (!selectedStation) {
+      // zoom out
+      map.flyTo(
+        [37.9838, 23.7275], 
+        13, 
+        { animate: true, duration: 1.5 }
+      );
+    }
+  }, [selectedStation, map]);
 
-export default function MapView({stations, onStationClick}) {
+  return null;
+}
+
+export default function MapView({stations, onStationClick,selectedStation}) {
   return (
     <MapContainer //boss component , creates the map object
       center={[37.9838, 23.7275]}   // Athens
@@ -16,12 +41,13 @@ export default function MapView({stations, onStationClick}) {
       />
 
       {stations && stations.map((station) => {
+        const isSelected = selectedStation?.station_id === station.station_id;
         return (
           <Marker
             key={station.station_id}
             position={[station.latitude, station.longitude]}
             //use the status directly from the databse result
-            icon={getMarkerIcon(station.station_status)} // Apply the custom icon here
+            icon={getMarkerIcon(station.station_status,isSelected)} // Apply the custom icon here
             eventHandlers={{
               click: () => {
                 onStationClick(station); //this triggers the sidebar to open
@@ -31,6 +57,7 @@ export default function MapView({stations, onStationClick}) {
           </Marker>
         );
       })}
+      <SetViewOnStation selectedStation={selectedStation} />
     </MapContainer>
   );
 }

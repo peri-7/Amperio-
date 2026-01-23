@@ -121,7 +121,7 @@ export default function FloatingSearch({ onSearch, filters, stations, onStationC
             className={`filter-pill ${filters.power?.length ? 'active' : ''}`}
             onClick={() => toggleDropdown('power')}
           >
-            Power {filters.power?.length > 0 ? `: ${filters.power.map(p => `${p}kW`).join(', ')}` : ''}
+            Power 
           </button>
 
           {openDropdown === 'power' && (
@@ -153,7 +153,7 @@ export default function FloatingSearch({ onSearch, filters, stations, onStationC
             className={`filter-pill ${filters.connector?.length > 0 ? 'active' : ''}`}
             onClick={() => toggleDropdown('connector')}
           >
-            Connector {filters.connector?.length > 0 ? `: ${filters.connector.join(', ')}` : ''}
+            Connector 
           </button>
 
           {openDropdown === 'connector' && (
@@ -221,7 +221,7 @@ export default function FloatingSearch({ onSearch, filters, stations, onStationC
             className={`filter-pill ${filters.score?.length ? 'active' : ''}`}
             onClick={() => toggleDropdown('score')}
           >
-            Score {filters.score?.length > 0 ? `: ${filters.score.map(s => `${s}+ stars`).join(', ')}` : ''}
+            Score 
           </button>
 
           {openDropdown === 'score' && (
