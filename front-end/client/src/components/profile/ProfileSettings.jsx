@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import api from "../../axiosConfig";
+import { AuthContext } from "../../context/AuthContext";
 import "../../styles/profile/ProfileSettings.css";
 
 const ProfileSettings = ({ profile }) => {
+    const { updateUser } = useContext(AuthContext);
     const [formData, setFormData] = useState({
         username: profile.username || "",
         email: profile.email || "",
@@ -87,6 +89,9 @@ const ProfileSettings = ({ profile }) => {
             
             setStatus({ type: "success", message: "Profile updated successfully!" });
             
+            // a new addition that updates the user context
+            await updateUser();
+
             // Clear password fields on success
             setFormData(prev => ({
                 ...prev,
@@ -151,7 +156,7 @@ const ProfileSettings = ({ profile }) => {
                                 value={formData.default_charger_power}
                                 onChange={handleChange}
                             >
-                                <option value="">Select power</option>
+                                <option value="">No Preference</option>
                                 {powerOptions.map((power) => (
                                     <option key={power} value={power}>{power} kW</option>
                                 ))}
@@ -166,7 +171,7 @@ const ProfileSettings = ({ profile }) => {
                                 value={formData.default_connector_type}
                                 onChange={handleChange}
                             >
-                                <option value="">Select a connector</option>
+                                <option value="">No Preference</option>
                                 {connectorOptions.map((connector) => (
                                     <option key={connector} value={connector}>{connector}</option>
                                 ))}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import api from "../axiosConfig";
 import { AuthContext } from "../context/AuthContext";
 import FloatingSearch from "../components/layout/FloatingSearch";
@@ -36,8 +36,6 @@ export default function Map() {
     facilities: [],
     score: []
   });
-
-  const hasSynced = useRef(false); // Prevents overwriting manual changes later
 
   const handleSearch = async (updatedFilters) => {
     const newFilters = { ...filters, ...updatedFilters }; /*merges old filters with new ones so we can check multiple at once*/
@@ -81,15 +79,20 @@ export default function Map() {
   };
 
   useEffect(() => {
-    // Only sync if we haven't synced yet and user has at least one default
-    if (!hasSynced.current && (user?.default_charger_power || user?.default_connector_type)) {
-      const updates = {};
-      if (user.default_charger_power) updates.power = [Number(user.default_charger_power)];
-      if (user.default_connector_type) updates.connector = [user.default_connector_type];
-      handleSearch(updates);
-      hasSynced.current = true; // Mark as done so it doesn't loop
+    // Sync filters with user's default settings.
+    // This effect runs when the user's default settings change.
+    const updates = {};
+    if (user?.default_charger_power && !filters.power.includes(Number(user.default_charger_power))) {
+      updates.power = [Number(user.default_charger_power)];
     }
-  }, [user, handleSearch]);
+    if (user?.default_connector_type && !filters.connector.includes(user.default_connector_type)) {
+      updates.connector = [user.default_connector_type];
+    }
+
+    if (Object.keys(updates).length > 0) {
+      handleSearch(updates);
+    }
+  }, [user?.default_charger_power, user?.default_connector_type]);
 
 
   const handleMarkerClick = async (station) => {
