@@ -156,22 +156,33 @@ const updatePoint = async (req, res, next) => {
             return next(new Error(`Point with ID ${id} not found for update`));
         }
 
-        //get and check body parameters
+        //get body parameters
         const { status, kwhprice } = req.body;
 
-        if (!VALID_STATUSES.includes(status)) {
+        //check if at least one parameter is provided
+        if (status === undefined && kwhprice === undefined) {
+            console.log('No parameters provided for update.');
             res.status(400);
-            const error = new Error(`Invalid status parameter. Supported values: ${VALID_STATUSES.join(', ')}`);
-		    return next(error);
+            return next(new Error('Please provide either status or kwhprice to update.'));
         }
 
-        //update point object
-        point.status = status;
-        point.kwhprice = kwhprice;
+        if (status !== undefined) {
+            if (!VALID_STATUSES.includes(status)) {
+                console.log(`Invalid status parameter: ${status}`);
+                res.status(400);
+                return next(new Error(`Invalid status parameter. Supported values: ${VALID_STATUSES.join(', ')}`));
+            }
 
-        //update database
-        await Charger.setPointStatus(id, status);
-        await Charger.setKwhPrice(id, kwhprice);
+            // update local object and DB
+            point.status = status;
+            await Charger.setPointStatus(id, status);
+        }
+        if (kwhprice !== undefined) {
+            console.log(`Updating kwhprice to: ${kwhprice}`);
+            //update local object and DB
+            point.kwhprice = kwhprice;
+            await Charger.setKwhPrice(id, kwhprice);
+        }
 
         console.log({ pointid: id, status: point.status, kwhprice: point.kwhprice });
         return res.status(200).json({ pointid: id, status: point.status, kwhprice: point.kwhprice });

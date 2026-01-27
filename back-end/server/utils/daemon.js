@@ -134,6 +134,7 @@ const updateChargerPointPrices = async () => {
         await Charger.setKwhPrice(c.pointid, current_price);
         });
     }
+    //Maybe add an else statement to fall back to a default price here
 };
 
 //Lil helper function
