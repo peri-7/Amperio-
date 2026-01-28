@@ -81,17 +81,17 @@ if (USE_HTTPS) {
 }
 
 //Schedule the price fetching at 1:00 every day
-cron.schedule('26 15 * * *', async () => {
+cron.schedule('32 15 * * *', async () => {
     let prices = await daemon.getPrices();
     while (!prices) {
         console.log("Failed to fetch prices from ENTSOE.");
-        cron.schedule('0 * * * *', async () => {
+        cron.schedule('* */1 * * *', async () => {
             prices = await daemon.getPrices();
         });
     }
     await daemon.savePriceList(prices);
 });
 
-cron.schedule('*/15 * * * *', async () => {
+cron.schedule('*/1 * * * *', async () => {
     await daemon.updateChargerPointPrices();
 });

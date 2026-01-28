@@ -61,7 +61,7 @@
     left: 50%;
     transform: translateX(-50%); /* Centers the search bar */
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
     background: transparent; /* Transparent so map shows between search and pills */
     display: flex;
     flex-direction: column;
@@ -123,8 +123,9 @@
 .user-btn {
     /* Existing rectangular styles */
     border: 1px solid transparent;
-    padding: 10px 30px;
+    padding: 8px 16px;
     border-radius: 10px; /* Rectangular look */
+    font-size: 13px;
     
     font-size: 16px;
     font-weight: 500;
@@ -146,13 +147,22 @@
     border-color: #000000;
   transform: translateY(-2px);
 }
-
-/* First Button (Login): Default White, Hover Yellow */
-.auth-buttons .user-btn:first-child{
+/* second Button (About): Default White, Hover Yellow */
+.auth-buttons .user-btn:nth-child(1){
     background: #FFFFFF;
     color: #000000;
 }
-.auth-buttons .user-btn:first-child:hover{
+.auth-buttons .user-btn:nth-child(1):hover{
+    background: var(--primary-color); /* Yellow */
+    color: #000000;
+}
+
+/* second Button (Login): Default White, Hover Yellow */
+.auth-buttons .user-btn:nth-child(2){
+    background: #FFFFFF;
+    color: #000000;
+}
+.auth-buttons .user-btn:nth-child(2):hover{
     background: var(--primary-color); /* Yellow */
     color: #000000;
 }

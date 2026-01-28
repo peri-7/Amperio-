@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import Map from "./pages/Map";
+import About from "./pages/About";
 import Unauthorized from "./pages/Unauthorized";
 import OnBoarding from "./pages/OnBoarding";
 import AdminStats from "./pages/AdminStats";
@@ -25,6 +26,7 @@ function App() {
 					<Route path="/map" element={<Map />} />
 					<Route path="/login" element={<Login />} />
 					<Route path="/signup" element={<Signup />} />
+					<Route path="/about" element={<About />} />
 					<Route path="/unauthorized" element={<Unauthorized />} />
 					
 					{/* Private */}
