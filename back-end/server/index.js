@@ -81,7 +81,7 @@ if (USE_HTTPS) {
 }
 
 //Schedule the price fetching at 1:00 every day
-cron.schedule('0 1 * * *', async () => {
+cron.schedule('26 15 * * *', async () => {
     let prices = await daemon.getPrices();
     while (!prices) {
         console.log("Failed to fetch prices from ENTSOE.");
