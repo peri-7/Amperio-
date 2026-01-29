@@ -67,6 +67,69 @@ class StationModel {
         return conn.query(query);
     }
 
+static async searchStations({ q, power, connector, available, facilities, score }) {
+    let queryParams = [];
+    let chargerFilters = [];
+
+    if (power?.length) {
+      const placeholders = power.map(() => '?').join(', ');
+      chargerFilters.push(`ch.power IN (${placeholders})`);
+      queryParams.push(...power);
+    }
+
+    if (connector?.length) {
+      const placeholders = connector.map(() => '?').join(', ');
+      chargerFilters.push(`ch.connector_type IN (${placeholders})`);
+      queryParams.push(...connector);
+    }
+
+    const joinType = chargerFilters.length > 0 ? 'INNER JOIN' : 'LEFT JOIN';
+
+    let queryText = `
+      SELECT s.station_id, s.address, s.latitude, s.longitude,
+             s.facilities, s.score,
+             CASE
+               WHEN SUM(CASE WHEN ch.charger_status = 'available' THEN 1 ELSE 0 END) > 0 THEN 'available'
+               WHEN SUM(CASE WHEN ch.charger_status = 'charging' THEN 1 ELSE 0 END) > 0 THEN 'charging'
+               WHEN SUM(CASE WHEN ch.charger_status = 'reserved' THEN 1 ELSE 0 END) > 0 THEN 'reserved'
+               ELSE 'offline'
+             END AS station_status,
+             SUM(CASE WHEN ch.charger_status = 'available' THEN 1 ELSE 0 END) AS available_chargers,
+             COUNT(CASE WHEN ch.charger_id IS NOT NULL THEN 1 END) AS total_chargers
+      FROM Station s
+      ${joinType} Charger ch ON s.station_id = ch.station_id
+      ${chargerFilters.length ? ` AND ${chargerFilters.join(' AND ')}` : ''}
+      WHERE 1=1
+    `;
+
+    if (q) {
+      const searchPattern = `%${q}%`;
+      queryText += ` AND (s.address LIKE ? OR s.facilities LIKE ?)`;
+      queryParams.push(searchPattern, searchPattern);
+    }
+
+    if (facilities?.length) {
+      const orConditions = facilities.map(() => 's.facilities LIKE ?').join(' OR ');
+      queryText += ` AND (${orConditions})`;
+      facilities.forEach(f => queryParams.push(`%${f.trim()}%`));
+    }
+
+    if (score?.length) {
+      const minScore = Math.min(...score);
+      queryText += ` AND s.score >= ?`;
+      queryParams.push(minScore);
+    }
+
+    queryText += ` GROUP BY s.station_id`;
+
+    if (available === true) {
+      queryText += ` HAVING SUM(CASE WHEN ch.charger_status = 'available' THEN 1 ELSE 0 END) > 0`;
+    }
+
+    const [rows] = await db.query(queryText, queryParams);
+    return rows;
+  }
+
     static async create(stationData, connection) {
         const conn = connection || db;
         const query = `
