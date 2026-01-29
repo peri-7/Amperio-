@@ -1,7 +1,8 @@
 
-import { useContext, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
+import api from "../axiosConfig"; 
 import { AuthContext } from "../context/AuthContext";
 import ProfileOverview from "../components/profile/ProfileOverview";
 import ProfileStats from "../components/profile/ProfileStats";
@@ -11,19 +12,43 @@ import "../styles/profile/Profile.css";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const { user, loading, logoutAction } = useContext(AuthContext);
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState(null);
   const [activeTab, setActiveTab] = useState("Overview");
+  const { logoutAction, syncUser } = useContext(AuthContext);
 
   const handleLogout = () => {
     logoutAction();
     navigate("/map");   
   };
 
+  const fetchProfile = async (showLoading = true) => {
+    if (showLoading) setLoading(true);
+    try {
+      const res = await api.get("/users/profile");
+      setProfile(res.data);
+      syncUser(res.data); // Keep context in sync
+    } catch (err) {
+      console.error("Error fetching profile", err);
+      if (err.response && err.response.status === 401) {
+          logoutAction();
+          navigate("/login");
+      }
+    } finally {
+      if (showLoading) setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile(true);
+  }, []);
+
+
   if (loading) {
     return <div className="loading-screen">Loading...</div>
   }
 
-  if (!user) {
+  if (!profile) {
     return <div className="error-screen">Could not load profile data. Please try logging in again.</div>;
   }
 
@@ -33,11 +58,11 @@ const Profile = () => {
 	{/*header - global to the page */}
 	<header className="profile-header">
 	  <div className="header-left">
-	    <h1>Hello, {user.username}</h1>
+	    <h1>Hello, {profile.username}</h1>
 	    <p className="subtitle">Profile</p>
 	  </div>
 	  <div className="header-right">
-	    {user.role === 'admin' && (
+	    {profile.role === 'admin' && (
 		<button className="btn-map" onClick={() => navigate("/stats")}>Business Analytics</button>
 	    )}
 	    <button className="btn-map" onClick={() => navigate("/map")}>Map</button>
@@ -61,9 +86,9 @@ const Profile = () => {
 
 	{/* Actual Content */}
 	<div className="tab-content">
-	  {activeTab === "Overview" && <ProfileOverview profile={user} />}
+	  {activeTab === "Overview" && <ProfileOverview profile={profile} />}
 	  {activeTab === "Stats" && <ProfileStats />}
-	  {activeTab === "Settings" && <ProfileSettings profile={user} />}
+	  {activeTab === "Settings" && <ProfileSettings profile={profile} onProfileUpdate={() => fetchProfile(false)} />}
 	</div>
 
      </div>

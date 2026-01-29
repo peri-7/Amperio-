@@ -3,8 +3,8 @@ import api from "../../axiosConfig";
 import { AuthContext } from "../../context/AuthContext";
 import "../../styles/profile/ProfileSettings.css";
 
-const ProfileSettings = ({ profile }) => {
-    const { updateUser } = useContext(AuthContext);
+const ProfileSettings = ({ profile, onProfileUpdate }) => {
+    const { } = useContext(AuthContext);
     const [formData, setFormData] = useState({
         username: profile.username || "",
         email: profile.email || "",
@@ -110,7 +110,9 @@ const ProfileSettings = ({ profile }) => {
             setStatus({ type: "success", message: "Profile updated successfully!" });
             
             // a new addition that updates the user context
-            await updateUser();
+            if (onProfileUpdate) {
+                await onProfileUpdate();
+            }
 
             // Clear password fields on success
             setFormData(prev => ({

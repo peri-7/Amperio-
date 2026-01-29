@@ -35,6 +35,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
   };
 
+  const syncUser = (userData) => {
+    setUser(userData);
+  }
+
   // restore user data on refresh
   useEffect(() => {
 	  const verifyUser = async () => {
@@ -58,7 +62,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ token, user, loading, loginAction, logoutAction, updateUser }}>
+    <AuthContext.Provider value={{ token, user, loading, loginAction, logoutAction, updateUser, syncUser }}>
       {!loading && children}
     </AuthContext.Provider>
   );
