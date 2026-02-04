@@ -1,6 +1,39 @@
-# Front-end
+# 🎨 Amperio | Front-End
 
-Ενδεικτικά περιεχόμενα:
+This directory contains the user interface for Amperio. Built with **React (JSX)** and **CSS**, designed to help EV owners find and reserve chargers with ease.
 
-- Front-end παρουσίασης δεδομένων σε περιβάλλον web.
-- Front-end tests (προαιρετικά για πολυπληθείς ομάδες).
+## 📂 Directory Contents
+
+* **`/client`**: The React source code and application logic.
+* **`/Figmas`**: Early design mockups.
+
+## 🚀 Getting Started
+
+ 1. Installation
+
+    Navigate to the client directory and install the necessary dependencies:
+
+        cd client
+        npm install
+
+ 2. Start the local server
+
+        npm run dev
+
+The app should now be running at `http://localhost:5173`
+
+
+## ✨ Features Implemented
+
+* **Interactive Map:** Browse available chargers in real-time.
+* **Smart Filters:** Filter by charging speed (kW), connector type (Type 2, CCS, etc.), and nearby amenities like cafes or parks.
+* **Reservation System:** Simply pick a charger and reserve it for the next hour.
+* **User Dashboard:** View and manage upcoming or past charging sessions.
+* **Admin Dashboard:** Manage chargers, users, and view system statistics.
+
+
+## 🛠 Tech Stack
+
+* **Framework:** React.js
+* **Styling:** CSS
+* **Build Tool:** [Vite / Create React App]
