@@ -27,7 +27,6 @@ The app should now be running at `http://localhost:5173`
 
 * **Interactive Map:** Browse available chargers in real-time.
 * **Smart Filters:** Filter by charging speed (kW), connector type (Type 2, CCS, etc.), and nearby amenities like cafes or parks.
-* **Reservation System:** Simply pick a charger and reserve it for the next hour.
 * **User Dashboard:** View and manage upcoming or past charging sessions.
 * **Admin Dashboard:** Manage chargers, users, and view system statistics.
 
