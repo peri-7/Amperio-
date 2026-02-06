@@ -50,6 +50,32 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
   animation: slideIn 0.3s ease-out;
+  max-height: calc(100vh - 110px);
+}
+
+/* Tablet responsiveness */
+@media (max-width: 768px) {
+  .station-drawer {
+    width: 350px;
+    left: 15px;
+    bottom: 15px;
+    top: 90px;
+    max-height: calc(100vh - 130px);
+    border-radius: 10px;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .station-drawer {
+    width: calc(100% - 30px);
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    top: auto;
+    max-height: 60vh;
+    border-radius: 12px 12px 0 0;
+  }
 }
 
 .station-ribbon {
@@ -66,6 +92,21 @@
   flex-direction: column;
   flex-grow: 1;
   overflow: hidden; 
+}
+
+/* Responsive padding for mobile */
+@media (max-width: 768px) {
+  .station-content {
+    padding: 20px;
+    padding-top: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .station-content {
+    padding: 15px;
+    padding-top: 10px;
+  }
 }
 
 /* Hide scrollbar for Chrome/Safari */
@@ -93,6 +134,19 @@
   line-height: 1.2;
   padding-right: 10px;
   word-wrap: break-word; /*prevent logn adresses from breaking the layout*/
+}
+
+/* Responsive heading sizes */
+@media (max-width: 768px) {
+  .station-drawer h2 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .station-drawer h2 {
+    font-size: 1.1rem;
+  }
 }
 
 .close-btn {
@@ -129,6 +183,25 @@
   align-items: center;
   /* Fixed height to match design while allowing content flex */
   min-height: 60px; 
+}
+
+/* Responsive charger card */
+@media (max-width: 768px) {
+  .charger-card {
+    padding: 10px 12px;
+    margin-top: 8px;
+    border-radius: 10px;
+    min-height: 55px;
+  }
+}
+
+@media (max-width: 480px) {
+  .charger-card {
+    padding: 8px 10px;
+    margin-top: 6px;
+    border-radius: 8px;
+    min-height: 50px;
+  }
 }
 
 .charger-info-main {

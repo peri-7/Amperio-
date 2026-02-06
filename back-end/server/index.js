@@ -5,7 +5,7 @@ const http = require('http');
 const https = require('https');
 const cron = require('node-cron');
 const daemon = require('./utils/daemon.js');
-require('dotenv').config();
+require('dotenv').config(); 
 
 
 // import error-handling middleware
@@ -80,19 +80,26 @@ if (require.main === module) {
     });
   }
 
+  //fetch prices immediately on startup
+  (async () => {
+      let prices = await daemon.getPrices();
+      await daemon.savePriceList(prices);
+      await daemon.updateChargerPointPrices();
+  })();
+
   //Schedule the price fetching at 1:00 every day
-  cron.schedule('19 16 * * *', async () => {
+  cron.schedule('00 1 * * *', async () => {
       let prices = await daemon.getPrices();
       while (!prices) {
           console.log("Failed to fetch prices from ENTSOE.");
-          cron.schedule('* */1 * * *', async () => {
+          cron.schedule('0 * * * *', async () => {
               prices = await daemon.getPrices();
           });
       }
       await daemon.savePriceList(prices);
   });
 
-  cron.schedule('*/1 * * * *', async () => {
+  cron.schedule('*/15 * * * *', async () => {
       await daemon.updateChargerPointPrices();
   });
 }

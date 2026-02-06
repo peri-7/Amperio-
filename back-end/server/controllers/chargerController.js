@@ -196,43 +196,6 @@ const updatePoint = async (req, res, next) => {
 };
 
 
-//in the process of moving this to the daemon
-const getPrices = async (req, res, next) => {
-    try {
-
-        //get current date and time in required format YYYYMMDD0000
-        const now = new Date();
-        const year = now.getFullYear();
-        let month = now.getMonth() + 1;
-        if (month < 10) month = `0${month}`;
-        let day = now.getDate();
-        if (day < 10) day = `0${day}`;
-
-        const periodStart = `${year}${month}${day}2000`;
-        const periodEnd   = `${year}${month}${day}2300`;
-
-        //set up url parameters
-        const url = "https://web-api.tp.entsoe.eu/api"
-        const ENTSOE_TOKEN = process.env.ENTSOE_TOKEN;
-        const documentType = "A44";
-        const Domain = "10YGR-HTSO-----Y";
-        const urlWithParams = `${url}?documentType=${documentType}&in_Domain=${Domain}&out_Domain=${Domain}&periodStart=${periodStart}&periodEnd=${periodEnd}&securityToken=${ENTSOE_TOKEN}`;
-
-        //fetch data from ENTSOE
-        const response = await fetch(urlWithParams);
-        const xmlText = await response.text();
-
-        console.log(response);
-        // parse XML and return ordered prices array
-        const prices = new XMLParser().parse(xmlText).Publication_MarketDocument.TimeSeries.Period.Point.map(p => Number(p['price.amount']));
-        return res.status(200).json({ prices });
-        //currently the prices are returned in a list so prices[0] is 23:00-23:15 in UTC time which is 
-        //actually the price for 01:00-01:15 in Greece local time (UTC+2)
-    } catch (err) {
-        next(err);
-    }
-};
-
 const getTimePointStatus= async (req, res,next) => {
     try {
         const { pointid, from, to } = req.params;
@@ -267,5 +230,5 @@ const getTimePointStatus= async (req, res,next) => {
     }
 };
 
-module.exports = { getPoints, getPointDetails, reservePoint, healthcheck , getTimePointStatus, updatePoint, getPrices };
+module.exports = { getPoints, getPointDetails, reservePoint, healthcheck , getTimePointStatus, updatePoint };
 

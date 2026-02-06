@@ -23,6 +23,7 @@
 .filter-pill,
 .user-btn,
 .dropdown-menu,
+.dropdown-wrapper,
 .suggestions-list {
     pointer-events: auto;
 }
@@ -55,6 +56,36 @@
     margin-right: 10px;
 }
 
+/* Mobile: Hide branding on very small screens */
+@media (max-width: 768px) {
+    .branding-island {
+        width: 50px;
+        height: 50px;
+        padding: 4px 8px;
+    }
+    
+    .mascot-img {
+        width: 50px;
+        height: 50px;
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .branding-island {
+        top: 10px;
+        left: 10px;
+        width: 45px;
+        height: 45px;
+        padding: 2px 4px;
+    }
+    
+    .mascot-img {
+        width: 45px;
+        height: 45px;
+    }
+}
+
 /* 2. TOP CENTER: Search and Pills */
 .search-filter-container {
     top: 20px;
@@ -69,6 +100,8 @@
     gap: 12px;
     overflow: visible !important;
     z-index: 2000;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .search-bar {
@@ -83,6 +116,7 @@
     display: flex;
     align-items: center;
     border: 1px solid rgba(0, 0, 0, 0.05); /* Optional: tiny border for definition */
+    box-sizing: border-box;
 }
 
 /* Inner search bar style */
@@ -106,11 +140,49 @@
     color: rgba(0, 0, 0, 0.4);       /* Faded version of your text color */
 }
 
+/* Mobile responsiveness for search container */
+@media (max-width: 768px) {
+    .search-filter-container {
+        top: 70px;
+        padding: 0 15px;
+        gap: 10px;
+    }
+    
+    .search-bar {
+        padding: 8px 15px;
+    }
+    
+    .search-bar input {
+        font-size: 14px;
+        margin-left: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-filter-container {
+        top: 65px;
+        width: calc(100% - 30px);
+        padding: 0 15px;
+        gap: 8px;
+        max-width: 100%;
+    }
+    
+    .search-bar {
+        padding: 8px 12px;
+        border-radius: 25px;
+    }
+    
+    .search-bar input {
+        font-size: 14px;
+        margin-left: 6px;
+    }
+}
+
 .user-island {
     position: absolute;
     top: 20px;
     right: 20px;
-    z-index: 1000;
+    z-index: 1001;
     background: transparent;
 }
 
@@ -145,8 +217,9 @@
 .user-btn:hover {
     color: #000000;
     border-color: #000000;
-  transform: translateY(-2px);
+    transform: translateY(-2px);
 }
+
 /* second Button (About): Default White, Hover Yellow */
 .auth-buttons .user-btn:nth-child(1){
     background: #FFFFFF;
@@ -178,14 +251,51 @@
     background: #FFFFFF;
     color: #000000;
 }
+
+/* Mobile responsiveness for user island */
+@media (max-width: 768px) {
+    .user-island {
+        top: 20px;
+        right: 15px;
+        z-index: 1001;
+    }
+    
+    .user-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .user-island {
+        top: 15px;
+        right: 10px;
+        z-index: 1001;
+    }
+    
+    .auth-buttons {
+        gap: 6px;
+        flex-wrap: wrap;
+        max-width: 200px;
+        right: 5px;
+    }
+    
+    .user-btn {
+        padding: 5px 10px;
+        font-size: 11px;
+        border-radius: 8px;
+    }
+}
 /* The Container: Controls the layout and spacing of the pills */
 .filter-pill-container {
     flex-shrink: 0;
     display: flex;         /* Lays pills out in a row */
     gap: 10px;            /* The "adequate space" between pills */
     padding: 5px 0;       /* Optional: space above/below the row */
-    overflow: visible !important;     /* Allows swiping on mobile if there are many pills */
+    overflow: visible !important;     /* Allow dropdowns to appear */
     width: 100%;          /* Takes full width of the search container */
+    flex-wrap: wrap;      /* Pills wrap to next line on mobile instead of scrolling */
+    justify-content: center;
     scrollbar-width: none; /* Hides scrollbar on Firefox */
 }
 
@@ -193,10 +303,25 @@
     display: none;        /* Hides scrollbar on Chrome/Safari */
 }
 
+/* Mobile responsiveness for filter pills */
+@media (max-width: 768px) {
+    .filter-pill-container {
+        gap: 8px;
+        padding: 5px 5px;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-pill-container {
+        gap: 6px;
+        padding: 4px 0;
+        justify-content: flex-start;
+    }
+}
+
 /* The Pills: Control the look of the buttons */
 .filter-pill {
-    
-    
     background: #FFFFFF;
     border: 1px solid transparent; /* Border only on hover */
     outline: none !important; /* Remove focus ring */
@@ -214,12 +339,31 @@
     transition: all 0.2s ease;
 
     max-width: 250px;       /* Limit the width */
-  white-space: nowrap;    /* Keep text on one line */
-  overflow: hidden;       /* Hide extra text */
-  text-overflow: ellipsis; /* Add "..." if too long */
-  display: inline-block;
+    white-space: nowrap;    /* Keep text on one line */
+    overflow: hidden;       /* Hide extra text */
+    text-overflow: ellipsis; /* Add "..." if too long */
+    display: inline-block;
+    flex-shrink: 0;
     
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Mobile responsiveness for pills */
+@media (max-width: 768px) {
+    .filter-pill {
+        padding: 5px 12px;
+        font-size: 12px;
+        border-radius: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-pill {
+        padding: 4px 10px;
+        font-size: 11px;
+        border-radius: 16px;
+        max-width: 200px;
+    }
 }
 
 /* Hover & Active States */
@@ -238,6 +382,7 @@
 .dropdown-wrapper {
     position: relative;
     display: inline-block;
+    pointer-events: auto;
 }
 
 .dropdown-menu {
@@ -253,6 +398,18 @@
     flex-direction: column;
     min-width: 120px;
     color: black;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.dropdown-menu.facilities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    min-width: 200px;
+    max-height: 350px;
+    overflow-y: auto;
+    gap: 8px;
+    padding: 10px;
 }
 
 .dropdown-menu button {
@@ -262,16 +419,60 @@
     text-align: left;
     cursor: pointer;
     color: black;
+    pointer-events: auto;
 }
 
 .dropdown-menu button:hover{
     background-color: var(--primary-color);
 }
 
+.facility-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    white-space: nowrap;
+    pointer-events: auto;
+}
+
+.facility-checkbox-item input[type="checkbox"] {
+    cursor: pointer;
+    pointer-events: auto;
+}
+
 
 .search-bar-wrapper {
   position: relative; /* So the list positions itself relative to this box */
   width: 100%;
+}
+
+/* Responsive search icon styling */
+.search-icon {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clear-icon {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .search-icon, .clear-icon {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-icon, .clear-icon {
+        font-size: 12px;
+    }
 }
 
 .suggestions-list {
@@ -287,6 +488,8 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   z-index: 1000;
   overflow: hidden;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .suggestions-list li {
@@ -303,6 +506,25 @@
 
 .suggestions-list li b {
   color: #007bff; /* Highlights the bold parts in blue */
+}
+
+/* Mobile responsiveness for suggestions */
+@media (max-width: 768px) {
+    .suggestions-list li {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .suggestions-list {
+        max-height: 200px;
+    }
+    
+    .suggestions-list li {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
 }
 
 
@@ -325,18 +547,17 @@
     pointer-events: auto !important; /* Forces clickability */
     
     /* Visual styles */
-    
-background-color: #FFFFFF;
+    background-color: #FFFFFF;
     border: 1px solid transparent;
     color: #FF0000;
     border-color: #ff0000;
-   /* background: #fff;
-    border: 1px solid #ff4d4f;
-    color: #ff4d4f; */
     padding: 6px 14px;
     border-radius: 20px;
     font-size: 13px;
     font-weight: 600;
+    white-space: nowrap;
+    display: inline-block;
+    flex-shrink: 0;
 }
 
 .clear-filters-btn:hover {
@@ -344,6 +565,22 @@ background-color: #FFFFFF;
     color: #ffffff;
     border-color: #ffffff;
     box-shadow: 0 2px 4px rgba(ff,ff,ff,0.1);
+}
+
+/* Mobile responsiveness for clear button */
+@media (max-width: 768px) {
+    .clear-filters-btn {
+        padding: 5px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .clear-filters-btn {
+        padding: 4px 10px;
+        font-size: 11px;
+        border-radius: 16px;
+    }
 }
 
 /* The clear link inside the dropdown menu 
