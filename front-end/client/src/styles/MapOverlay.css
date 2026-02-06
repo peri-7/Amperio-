@@ -276,7 +276,8 @@
     .auth-buttons {
         gap: 6px;
         flex-wrap: wrap;
-        max-width: 150px;
+        max-width: 200px;
+        right: 5px;
     }
     
     .user-btn {
