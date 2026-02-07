@@ -50,10 +50,19 @@ program
 				const res = await api.get(`/admin/healthcheck`);
 				console.log((res.data));
 			} 
-			catch (err) 
-			{
-				console.error("Error with healthcheck:", err.message);
-			}
+			catch (err) { 
+                                if (err.response) {
+                                // API responded with an error status
+                                        console.error(err.response.data);
+                                } else if (err.request) {
+                                // Request was made but no response
+                                        console.error("No response received:", err.request);
+                                } else {
+                                // Something else went wrong
+                                        console.error("Error:", err.message);
+                                }
+                        }
+
 		});
 
 program
@@ -63,9 +72,19 @@ program
 		try {
 			const res = await api.post(`/admin/resetpoints`);
 			console.log(res.data);
-		} catch (err) {
-			console.error("Error with reset:", err.message);
 		}
+		catch (err) {
+                                if (err.response) {
+                                // API responded with an error status
+                                        console.error(err.response.data);
+                                } else if (err.request) {
+                                // Request was made but no response
+                                        console.error("No response received:", err.request);
+                                } else {
+                                // Something else went wrong
+                                        console.error("Error:", err.message);
+                                }
+                }
 	});
 
 program
@@ -90,9 +109,20 @@ program
 
 		console.log("Upload successful");
 		console.log(res.data);
-	} catch (err) {
-		console.error("Upload failed:", err.response?.data || err.message);
-}
+	}
+	catch (err) { 
+                                if (err.response) {
+                                // API responded with an error status
+                                        console.error(err.response.data);
+                                } else if (err.request) {
+                                // Request was made but no response
+                                        console.error("No response received:", err.request);
+                                } else {
+                                // Something else went wrong
+                                        console.error("Error:", err.message);
+                                }
+        }
+
 });
 
 program
@@ -120,10 +150,19 @@ program
 					console.log(csv);
 				}
 			}
-			catch (err)
-			{
-				console.error("Error fetching points:", err.message);
-			}
+			catch (err) { 
+                                if (err.response) {
+                                // API responded with an error status
+                                        console.error(err.response.data);
+                                } else if (err.request) {
+                                // Request was made but no response
+                                        console.error("No response received:", err.request);
+                                } else {
+                                // Something else went wrong
+                                        console.error("Error:", err.message);
+                                }
+                        }
+
 		});
 
 program
@@ -137,15 +176,18 @@ program
 				const res = await api.get(`/point/${opts.id}`);
 				console.log(res.data);
 			}
-			catch (err)
-			{
-				// If the server sends a JSON error response, print it.
-				if (err.response && err.response.data) {
-					console.error(JSON.stringify(err.response.data, null, 2));
-				} else {
-					console.error("Error fetching points:", err.message);
-				}
-			}
+			catch (err) {
+ 				if (err.response) {
+    				// API responded with an error status
+    					console.error(err.response.data);
+  				} else if (err.request) {
+    				// Request was made but no response
+    					console.error("No response received:", err.request);
+  				} else {
+   				// Something else went wrong
+    					console.error("Error:", err.message);
+  				}
+			}			
 		});
 
 program
@@ -160,10 +202,19 @@ program
 			const res = await api.post(url);
 			console.log(res.data);
 		} 
-		catch (err) 
-		{
-			console.error("Error reserving station:", err.message);
-		}
+		catch (err) { 
+                                if (err.response) {
+                                // API responded with an error status
+                                        console.error(err.response.data);
+                                } else if (err.request) {
+                                // Request was made but no response
+                                        console.error("No response received:", err.request);
+                                } else {
+                                // Something else went wrong
+                                        console.error("Error:", err.message);
+                                }
+                        }
+
 	});
 
 program
@@ -194,10 +245,19 @@ program
 
 			console.log(res.data);
 		} 
-		catch (err) 
-		{
-			console.error("Error updating station:", err.message);
-		}
+		catch (err) { 
+                                if (err.response) {
+                                // API responded with an error status
+                                        console.error(err.response.data);
+                                } else if (err.request) {
+                                // Request was made but no response
+                                        console.error("No response received:", err.request);
+                                } else {
+                                // Something else went wrong
+                                        console.error("Error:", err.message);
+                                }
+                        }
+
 	});
 
 program
@@ -228,10 +288,19 @@ program
 
 			console.log(res.data);
 		}
-		catch (err)
-		{
-			console.error("Error newsession:", err.message);
-		}
+		catch (err) { 
+                                if (err.response) {
+                                // API responded with an error status
+                                        console.error(err.response.data);
+                                } else if (err.request) {
+                                // Request was made but no response
+                                        console.error("No response received:", err.request);
+                                } else {
+                                // Something else went wrong
+                                        console.error("Error:", err.message);
+                                }
+                        }
+
 	});
 
 program
@@ -256,10 +325,19 @@ program
                                         console.log(csv);
                                 }
 			}
-			catch (err)
-			{
-				console.error("Error fetching sessions:", err.message);
-			}
+			catch (err) { 
+                                if (err.response) {
+                                // API responded with an error status
+                                        console.error(err.response.data);
+                                } else if (err.request) {
+                                // Request was made but no response
+                                        console.error("No response received:", err.request);
+                                } else {
+                                // Something else went wrong
+                                        console.error("Error:", err.message);
+                                }
+                        }
+
 		});
 
 program
@@ -284,9 +362,17 @@ program
                                         console.log(csv);
                                 }
                         }
-                        catch (err)
-                        {
-                                console.error("Error fetching point status:", err.message);
+			catch (err) {
+                                if (err.response) {
+                                // API responded with an error status
+                                        console.error(err.response.data);
+                                } else if (err.request) {
+                                // Request was made but no response
+                                        console.error("No response received:", err.request);
+                                } else {
+                                // Something else went wrong
+                                        console.error("Error:", err.message);
+                                }
                         }
                 });
 
