@@ -169,10 +169,10 @@ describe('Requested APIs', () => {
             expect(res.body).toHaveProperty('reservationendtime');
         });
 
-        it('should return 204 for a non-existent point ID', async () => {
+        it('should return 404 for a non-existent point ID', async () => {
             await request(app)
                 .get('/api/point/999999999')
-                .expect(204);
+                .expect(404);
         });
     });
 

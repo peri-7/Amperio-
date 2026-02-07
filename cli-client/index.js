@@ -316,14 +316,16 @@ program
 			{
 				const res = await api.get(`/sessions/${opts.id}/${opts.from}/${opts.to}`);
 
-				res.data.sort((a, b) => b.starttime - a.starttime);
+				if(Array.isArray(res.data) && res.data.length > 0) {
 
+				res.data.sort((a, b) => b.starttime - a.starttime);
 				if (opts.format === "json") {
                                         console.log(JSON.stringify(res.data, null, 2));
                                 } else if (opts.format === "csv") {
                                         const csv = stringify(res.data, { header: true });
                                         console.log(csv);
-                                }
+                                	}
+				}
 			}
 			catch (err) { 
                                 if (err.response) {
@@ -351,13 +353,23 @@ program
                 {
                         try
                         {
-                                const res = await axios.get(`${API_BASE}/pointstatus/${opts.id}/${opts.from}/${opts.to}`);
+                                // FIX 1: Create an agent to ignore self-signed certificate errors
+								const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
-                                res.data.sort((a, b) => b.starttime - a.starttime);
+								// FIX 2: Pass { httpsAgent } as the second argument to axios.get
+								const res = await axios.get(
+									`${API_BASE}/pointstatus/${opts.id}/${opts.from}/${opts.to}`,
+									{ httpsAgent } 
+								);
 
-                                if (opts.format === "json") {
-                                        console.log(JSON.stringify(res.data, null, 2));
-                                } else if (opts.format === "csv") {
+								// FIX 3: Safety check - ensure data is an array before sorting
+								if (Array.isArray(res.data) && res.data.length > 0) {
+
+									res.data.sort((a, b) => b.timeref - a.timeref);
+
+									if (opts.format === "json") {
+											console.log(JSON.stringify(res.data, null, 2));
+                                	} else if (opts.format === "csv") {
                                         const csv = stringify(res.data, { header: true });
                                         console.log(csv);
                                 }

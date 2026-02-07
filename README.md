@@ -36,7 +36,7 @@ then thorugh your DB client or using the terminal run the scripts in the /back-e
  3. `Views.sql`
  4. `Triggers.sql` 
 
-Lastly, make sure to set the environemntal variables. Rename the `.env.example` file to `.env` and change the contents to match your data.  
+Lastly, make sure to set the environemntal variables. Rename the `example.env` file to `.env` and change the contents to match your data.  
 (for more info on what each environmental variable does see [Backend README](back-end/README.md))
 
 

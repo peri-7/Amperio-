@@ -54,7 +54,7 @@ const getPointDetails = async (req, res, next) => {
         // 1. Fetch data
         const point = await Charger.getById(id);
         
-        // 2. Handle 404 - Not Found
+        // 2. Handle 204 - Not Found
         if (!point) {
             res.status(404);
             return next(new Error(`Point with ID ${id} not found`));
@@ -138,8 +138,9 @@ const reservePoint = async (req, res, next) => {
             return res.status(200).json({ pointid: id, status: point.status, reservationendtime: point.reservationendtime });
         }
         else {
+            const failureTime = "1970-01-01 00:00";
             res.status(404);
-            console.log({ pointid: id, status: point.status, reservationendtime: point.reservationendtime });
+            console.log({ pointid: id, status: point.status, reservationendtime: failureTime });
             return next(new Error(`Point with ID ${id} is not available for reservation`));
         }
     } catch (error) {
