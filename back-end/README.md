@@ -17,7 +17,7 @@ To ensure the application functions correctly, you must run the SQL scripts in a
 **Note:** Ensure your MySQL service is running before executing these scripts via your preferred DB client (MySQL Workbench, DBeaver, or CLI).
 
 ## 🔑 Environment Variables
-The server relies on a .env file located in the `/server/config` directory.  
+The server relies on a .env file located in the `/server` directory.  
 Rename the `example.env` file to `.env` and add the following variables:
 | Variable | Description | Example |
 |------|------|----------|

@@ -1,11 +1,6 @@
-# ai-log
+# Amperio | AI-Logs
 
-Περιεχόμενα:
+In this directory are all the ai queries made through the [ai-logs](https://ailog.softlab.ntua.gr) portal 
+to help us in the development of this project.
 
-- Όλα τα αρχεία του ai-tools-questionnaire - Softeng 2025-26 που ανεβάσατε είτε με το frontend https://ailog.softlab.ntua.gr/ είτε με το CLI tool που μπορείτε να κατεβάσετε από το frontend (υποστηρίζεται sh script για Windows & Unix).
-
-Προσοχή 1: προσπαθείστε τα ονόματα αρχείων να διευκολύνουν την ταξινόμηση πχ 2023-10-29-16:55-req.zip
-
-Προσοχή 2: κάθε αρχείο zip περιέχει α) το αρχείο μεταδεδομένων και β) το σύνολο του διαλόγου (prompts & answers) με το εργαλείο.
-
-Δείτε το video: https://youtu.be/eUAjxCRNODU
+//maybe add something about the logs format once we know what it is like
