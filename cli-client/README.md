@@ -43,6 +43,11 @@ Starting with the keyword `se2519` you can type any of the following commands to
 
 **Note**: Parameters marked with bold italics are mandatory for the respective command.
 
+exapmle command: 
+```bash 
+se2519 reserve --id 123 --minutes 30
+```
+
 ## 🧪 Testing
 To run the test cases for the CLI commands, ensure the **Backend Server** is running and then use the following command in the cli-client directory:
 
@@ -56,5 +61,3 @@ to test the healthcheck command
 ## 🛠 Troubleshooting
 
 * **Authority Invalid:** If you encounter an "err_cer_authority_invalid" error, you may need to run an api endpoint on your browser and accept the security exception for the backend server's SSL certificate. 
-
-Alternatively, you can try to add the backend server's SSL certificate to your system's trusted certificates. This is a common issue when working with self-signed certificates in development environments. //this was autocompleted by chatgpt, so it may not be accurate. Please verify this information before including it in the README.
