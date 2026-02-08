@@ -7,6 +7,7 @@ and the database configuration scripts.
 - `/database`: SQL scripts for schema creation, performance optimization, and business logic.
 - `/tests`: Test cases for API endpoints and database functions.
 - `api_documentation.md`: Detailed breakdown of available endpoints, request bodies, and response codes.
+- `/database/sample_data`: Sample charger data and scripts for populating the DB using the `resetpoints` api and in CSV format for testing the `addpoints` api.
 
 ## 🛠 Database Setup
 To ensure the application functions correctly, you must run the SQL scripts in a specific order to satisfy foreign key constraints and dependencies.
