@@ -34,29 +34,29 @@ const OnBoarding = () => {
         : [...new Set(CHARGER_CONFIGS.flatMap(c => c.connectors))];
 
     const handleSubmit = async (e) => {
-  e.preventDefault();
+        e.preventDefault();
 
-  // If nothing is selected, treat it as a skip
-  if (!selectedPower && !selectedConnector) {
-    navigate("/profile");
-    return;
-  }
+        // If nothing is selected, treat it as a skip
+        if (!selectedPower && !selectedConnector) {
+            navigate("/profile");
+            return;
+        }
 
-  // If something is selected, perform the save
-  setLoading(true);
-  try {
-    await api.put("/users/profile", {
-      default_charger_power: selectedPower,
-      default_connector_type: selectedConnector
-    });
-    await updateUser(); // Update the user context with new defaults
-    navigate("/profile");
-  } catch (err) {
-    alert(err.response?.data?.message || "Error updating preferences");
-  } finally {
-    setLoading(false);
-  }
-};
+        // If something is selected, perform the save
+        setLoading(true);
+        try {
+            await api.put("/users/profile", {
+                default_charger_power: selectedPower,
+                default_connector_type: selectedConnector
+            });
+            await updateUser(); // Update the user context with new defaults
+            navigate("/profile");
+        } catch (err) {
+            alert(err.response?.data?.message || "Error updating preferences");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="onboarding-container">
@@ -78,9 +78,9 @@ const OnBoarding = () => {
                                     <button
                                         key={config.power}
                                         type="button"
+                                        disabled={!isAvailable}
                                         className={`pill ${isSelected ? 'selected' : ''} ${!isAvailable ? 'disabled-grey' : ''}`}
-                                        onClick={() => setSelectedPower(isSelected ? null : config.power)}
-                                    >
+                                        onClick={() => isAvailable && setSelectedPower(isSelected ? null : config.power)}                                    >
                                         {config.power} kW
                                     </button>
                                 );
@@ -100,9 +100,9 @@ const OnBoarding = () => {
                                     <button
                                         key={type}
                                         type="button"
+                                        disabled={!isAvailable}
                                         className={`pill ${isSelected ? 'selected' : ''} ${!isAvailable ? 'disabled-grey' : ''}`}
-                                        onClick={() => setSelectedConnector(isSelected ? null : type)}
-                                    >
+onClick={() => isAvailable && setSelectedConnector(isSelected ? null : type)}                                    >
                                         {type}
                                     </button>
                                 );
