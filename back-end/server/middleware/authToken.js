@@ -6,7 +6,8 @@ const verifyToken = (req, res, next) => {
   const token = req.headers['authorization'];
 
   if (!token) {
-    return res.status(403).json({ message: "No token provided. Access denied." });
+	  res.status(401);
+    return next(new Error ("No token provided. Access denied.");
   }
 
   // 2. Remove the "Bearer " prefix if present (optional but standard)
@@ -15,7 +16,8 @@ const verifyToken = (req, res, next) => {
   // 3. Verify the signature
   jwt.verify(tokenString, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: "Invalid Token" });
+	    res.status(401);
+      return next(new Error("Invalid Token"));
     }
     
     // 4. Success! Save the user ID so the controller can use it

@@ -140,8 +140,8 @@ Retrieve all available statistical data for charts for admin statistics.
 **Endpoint:** `GET /api/adminStats/charts`
 
 **Query Parameters:** 
-- range: Optional, brings the statistics for the last <range> months. Default is 12 if not specified.
-- chargerID: Optional, used if data for a specific charger id requested, else it returns global statistics only.
+- `range` (optional): brings the statistics for the last <range> months. Default is 12 if not specified.
+- `chargerID` (optional): used if data for a specific charger id requested, else it returns global statistics only.
 
 **Response (200 OK):**
 ```json
@@ -164,7 +164,7 @@ Retrieve all available statistical data for charts for admin statistics.
 
 **Error Responses:**
 All errors return error log objects
-- `401 Unauthorized`: Invalid token, user does not exist
+- `401 Unauthorized`: Invalid token
 - `403 Forbidden`: User not an admin
 - `500 Internal Server Error`: Server error (returns error log)
 
@@ -175,7 +175,7 @@ Returns all available statistics for the administrator. Administrator must be lo
 
 ## Authentication Routes
 
-**File:** [`back-end/server/routes/authRoutes.js`](back-end/server/routes/authRoutes.js)
+**File:** [`back-end/server/routes/authRoutes.js`](../back-end/server/routes/authRoutes.js)
 
 Base URL: `/api/auth`
 
@@ -255,7 +255,7 @@ Authenticates user using email or username with password. Returns JWT token (1 h
 
 ## Meta Routes
 
-**File:** [`back-end/server/routes/metaRoutes.js`](back-end/server/routes/metaRoutes.js)
+**File:** [`back-end/server/routes/metaRoutes.js`](../back-end/server/routes/metaRoutes.js)
 
 Base URL: `/api/meta`
 
@@ -298,11 +298,11 @@ Returns all available filter options for the station search functionality. Inclu
 
 ## Station Routes
 
-**File:** [`back-end/server/routes/stationRoutes.js`](back-end/server/routes/stationRoutes.js)
+**File:** [`back-end/server/routes/stationRoutes.js`](../back-end/server/routes/stationRoutes.js)
 
 Base URL: `/api/stations`
 
-### GET /
+### GET /points or /points?status=xxxx
 
 Retrieve all stations.
 
@@ -425,7 +425,7 @@ Advanced search endpoint with multiple filter options. Combines charger-level fi
 
 ## Reservations Routes
 
-**File:** [`back-end/server/routes/reservationsRoutes.js`](back-end/server/routes/reservationsRoutes.js)
+**File:** [`back-end/server/routes/reservationsRoutes.js`](../back-end/server/routes/reservationsRoutes.js)
 
 Base URL: `/api/reservations`
 
@@ -467,10 +467,286 @@ Authorization: Bearer <JWT_TOKEN>
 **Description:**
 Returns all upcoming reservations for the authenticated user. Requires valid JWT token in Authorization header. Token must be obtained from the login or signup endpoints.
 
+---
+
+## Requested Routes
+
+**File:** [`back-end/server/routes/requestedRoutes.js`](../back-end/server/routes/requestedRoutes.js)
+
+Base URL: `/api`
+
+### GET /points
+
+Retrieve all charging points with the given status or all charging points in general, if no status is given.
+
+**Endpoint:** `GET /api/points`
+
+**Query Parameters:** 
+- (optional) `status`: it must be a valid status parameter for a charging point: available, charging, reserved, malfunction and offline
+- (optional) `format`: can be json or csv and the return object will have the corresponding format
+
+**Response (200 OK):**
+```json
+[
+  {
+    "providerName": "bestPowerGR",
+    "pointid": 1,
+    "lon": "23.7345",
+    "lat": "37.9838",
+    "status": "available",
+    "cap": 50
+  },
+  ...
+]
+```
+**Response (204 OK):** no points found
+```json
+[]
+```
+
+**Error Responses:**
+- `400 Bad Request`: Invalid status given is query parameter
+- `500 Internal Server Error`: Server error
+
+**Description:**
+Returns all charging points with the specific status in the query parameter. If no status is given, returns all charging points in the database.
+
+---
+
+### GET /point/:id
+
+Retrieve detailed information about a specific point.
+
+**Endpoint:** `GET /api/point/:id`
+
+**Request Parameters:**
+- `id` (path parameter): Point ID (required)
+
+**Response (200 OK):**
+```json
+{
+  "pointid": 2,
+  "lon": "23.7275",
+  "lat": "37.9755",
+  "status": "reserved",
+  "cap": 22,
+  "reservationendtime": "2025-11-10 18:30",
+  "kwhprice": 0.59
+}
+```
+
+**Error Responses:**
+- `400 Not Found`: Invalid Path parameter
+- `404 Not Found`: point not found (no point with such id)
+- `500 Internal Server Error`: Server error
+
+**Description:**
+Returns detailed information about the point specified in the path parameter.
+
+---
+
+### POST /reserve/:id/:minutes
+
+Reserve a charging point for the specified amount of minutes.
+
+**Endpoint:** `POST /api/reserve/:id/:minutes`
+
+**Path Parameters:**
+- `id` (required): id of charging point to be reserved 
+- `minutes` (optional): amount of minutes for reservation
+
+**Response (200 OK):**
+```json
+{
+  "pointid": 2,
+  "status": "reserved",
+  "reservationendtime": "2025-11-10 19:00"
+}
+```
+
+**Error Responses:**
+- `404 Internal Server Error`: Point does not exist or is not available for reservation
+- `500 Internal Server Error`: Server error
+
+**Description:**
+Reserve the specified charger. The reservation expires after the amount of minutes passes from the time of the reservation. If amount of minutes is not specified, it is reserved for the default amount of 30 minutes. If the amount of minutes is specified but exceeds the limit of reservation (60 minutes), the charger is reserved for 60 minutes. If the amount of minutes is not over the limit, the charger is reserved for the specified amount. 
+
+---
+
+### GET /
+
+Retrieve all stations.
+
+**Endpoint:** `GET /api/stations`
+
+**Request Parameters:** None
+
+**Response (200 OK):**
+```json
+[
+  {
+    "station_id": 1,
+    "address": "123 Main St, City",
+    "latitude": 40.7128,
+    "longitude": -74.0060,
+    "facilities": "WiFi,Cafe,Restroom",
+    "score": 4.5,
+    "station_status": "available",
+    "available_chargers": 3,
+    "total_chargers": 5
+  },
+  ...
+]
+```
+
+**Error Responses:**
+- `500 Internal Server Error`: Server error
+
+**Description:**
+Returns all charging stations in the system with their current status, available chargers, and amenities. No authentication required.
+
+---
+
+### GET /:id
+
+Retrieve detailed information about a specific station.
+
+**Endpoint:** `GET /api/stations/{id}`
+
+**Request Parameters:**
+- `id` (path parameter): Station ID
+
+**Response (200 OK):**
+```json
+{
+  "station_id": 1,
+  "address": "123 Main St, City",
+  "latitude": 40.7128,
+  "longitude": -74.0060,
+  "facilities": "WiFi,Cafe,Restroom",
+  "score": 4.5,
+  "chargers": [
+    {
+      "charger_id": 101,
+      "connector_type": "Type 2",
+      "power": 22,
+      "charger_status": "available"
+    },
+    ...
+  ]
+}
+```
+
+**Error Responses:**
+- `404 Not Found`: Station not found
+- `500 Internal Server Error`: Server error
+
+**Description:**
+Returns detailed information about a specific station, including all chargers with their specifications and current status. No authentication required. Used for StationDetails.jsx
+
+---
+
+### GET /search
+
+Search and filter stations by various criteria.
+
+**Endpoint:** `GET /api/stations/search`
+
+**Request Parameters (Query String):**
+- `q` (optional): Search query for address 
+- `power` (optional): Comma-separated power levels (e.g., "11,22,50")
+- `connector` (optional): Comma-separated connector types (e.g., "Type 2,CCS1")
+- `available` (optional): Boolean string ("true"/"false") - show only stations with available chargers
+- `facilities` (optional): Comma-separated facility names to filter by
+- `score` (optional): Comma-separated minimum ratings (returns stations matching any specified rating)
+
+**Example Requests:**
+```
+GET /api/stations/search?q=Ilioupoli
+GET /api/stations/search?power=22,50&connector=Type 2
+GET /api/stations/search?available=true&facilities=WiFi,Cafe
+GET /api/stations/search?q=main&score=4,5&power=50
+```
+
+**Response (200 OK):**
+```json
+[
+  {
+    "station_id": 1,
+    "address": "Ilioupoli, SunCity",
+    "latitude": 40.7128,
+    "longitude": -74.0060,
+    "facilities": "WiFi,Cafe,Restroom",
+    "score": 4.5,
+    "station_status": "available",
+    "available_chargers": 3,
+    "total_chargers": 5
+  },
+  ...
+]
+```
+
+**Error Responses:**
+- `500 Internal Server Error`: Server error
+
+**Description:**
+Advanced search endpoint with multiple filter options. Combines charger-level filters (power, connector) with station-level filters (facilities, score). Use INNER JOIN logic when charger filters are applied to exclude incompatible stations. Returns only stations with available chargers when `available=true`. No authentication required.
+
+
+---
+
+### GET /search
+
+Search and filter stations by various criteria.
+
+**Endpoint:** `GET /api/stations/search`
+
+**Request Parameters (Query String):**
+- `q` (optional): Search query for address 
+- `power` (optional): Comma-separated power levels (e.g., "11,22,50")
+- `connector` (optional): Comma-separated connector types (e.g., "Type 2,CCS1")
+- `available` (optional): Boolean string ("true"/"false") - show only stations with available chargers
+- `facilities` (optional): Comma-separated facility names to filter by
+- `score` (optional): Comma-separated minimum ratings (returns stations matching any specified rating)
+
+**Example Requests:**
+```
+GET /api/stations/search?q=Ilioupoli
+GET /api/stations/search?power=22,50&connector=Type 2
+GET /api/stations/search?available=true&facilities=WiFi,Cafe
+GET /api/stations/search?q=main&score=4,5&power=50
+```
+
+**Response (200 OK):**
+```json
+[
+  {
+    "station_id": 1,
+    "address": "Ilioupoli, SunCity",
+    "latitude": 40.7128,
+    "longitude": -74.0060,
+    "facilities": "WiFi,Cafe,Restroom",
+    "score": 4.5,
+    "station_status": "available",
+    "available_chargers": 3,
+    "total_chargers": 5
+  },
+  ...
+]
+```
+
+**Error Responses:**
+- `500 Internal Server Error`: Server error
+
+**Description:**
+Advanced search endpoint with multiple filter options. Combines charger-level filters (power, connector) with station-level filters (facilities, score). Use INNER JOIN logic when charger filters are applied to exclude incompatible stations. Returns only stations with available chargers when `available=true`. No authentication required.
+
+
+---
 
 ## User Routes
 
-**File:** [`back-end/server/routes/userRoutes.js`](back-end/server/routes/userRoutes.js)
+**File:** [`back-end/server/routes/userRoutes.js`](../back-end/server/routes/userRoutes.js)
 
 Base URL: `/api/users`
 
@@ -527,6 +803,7 @@ Authorization: Bearer <JWT_TOKEN>
   "username": "john_doe",
   "email": "john@example.com",
   "role": "user"
+  "default_connector_type": "Type 2"
 }
 ```
 
@@ -583,7 +860,7 @@ Updates user profile information. Password is hashed before storage. At least on
 
 ## User Stats Routes
 
-**File:** [`back-end/server/routes/userStatsRoutes.js`](back-end/server/routes/userStatsRoutes.js)
+**File:** [`back-end/server/routes/userStatsRoutes.js`](../back-end/server/routes/userStatsRoutes.js)
 
 Base URL: `/api/stats`
 
@@ -603,11 +880,8 @@ Authorization: Bearer <JWT_TOKEN>
 **Response (200 OK):**
 ```json
 {
-  "total_reservations": 45,
-  "total_energy_charged": 1250.5,
-  "average_charging_time": 87,
-  "favorite_station": "Station Downtown",
-  "most_used_connector": "Type 2"
+  "totalSessions": 10,
+  "totalEnergy": 1250.5,
 }
 ```
 
@@ -635,42 +909,12 @@ Authorization: Bearer <JWT_TOKEN>
 **Response (200 OK):**
 ```json
 {
-  "usage_by_month": [
-    {
-      "month": "January",
-      "reservations": 8,
-      "energy_kwh": 125.5
-    },
-    {
-      "month": "February",
-      "reservations": 12,
-      "energy_kwh": 189.3
-    }
-  ],
-  "usage_by_station": [
-    {
-      "station_name": "Downtown",
-      "count": 15,
-      "percentage": 33.3
-    },
-    {
-      "station_name": "Airport",
-      "count": 10,
-      "percentage": 22.2
-    }
-  ],
-  "usage_by_connector": [
-    {
-      "connector_type": "Type 2",
-      "count": 30,
-      "percentage": 66.7
-    },
-    {
-      "connector_type": "CCS1",
-      "count": 15,
-      "percentage": 33.3
-    }
-  ]
+  "session_id": 1,
+  "start_time": "2025-10-12 09:00",
+  "end_time": "2025-10-12 13:00",
+  "price_per_kwh": 0.5,
+  "station_id": 12,
+  "station_name": 
 }
 ```
 
