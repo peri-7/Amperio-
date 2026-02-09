@@ -5,7 +5,9 @@ and the database configuration scripts.
 ## 📂 Directory Contents
 - `/server`: Node.js/Express application source code.
 - `/database`: SQL scripts for schema creation, performance optimization, and business logic.
+- `/tests`: Test cases for API endpoints and database functions.
 - `api_documentation.md`: Detailed breakdown of available endpoints, request bodies, and response codes.
+- `/database/sample_data`: Sample charger data and scripts for populating the DB using the `resetpoints` api and in CSV format for testing the `addpoints` api.
 
 ## 🛠 Database Setup
 To ensure the application functions correctly, you must run the SQL scripts in a specific order to satisfy foreign key constraints and dependencies.
@@ -42,4 +44,9 @@ Rename the `example.env` file to `.env` and add the following variables:
 The server will typically start on https://localhost:9876 unless specified otherwise.
 
 ## 🧪 Testing the API
-You can find the full list of endpoints in the `api_documentation.md` file. To test if the backend is alive, you can ping:GET /api/healthcheck
+Using the `/tests` directory, you can run test cases for various API endpoints to ensure they are functioning as expected.  
+Simply navigate to anywhere in the `/server` directory and run:
+```bash
+npm test
+```
+This will execute all test cases and provide a report on their success or failure.

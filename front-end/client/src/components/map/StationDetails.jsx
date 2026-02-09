@@ -4,13 +4,13 @@ import "./StationDetails.css";
 const ConnectorIcon = ({ type }) => {
   switch (type) {
     case 'Type 2':
-      return <img src="src/assets/images/type2.png" alt="Type 2 Connector" className="connector-icon" />;
+      return <img src="/type2.png" alt="Type 2 Connector" className="connector-icon" />;
     case 'CCS1':
-      return <img src="src/assets/images/ccs1.png" alt="CCS1 Connector" className="connector-icon" />;
+      return <img src="/ccs1.png" alt="CCS1 Connector" className="connector-icon" />;
     case 'CCS2':
-      return <img src="src/assets/images/ccs2.png" alt="CCS2 Connector" className="connector-icon" />;
+      return <img src="/ccs2.png" alt="CCS2 Connector" className="connector-icon" />;
     case 'CHAdeMO':
-      return <img src="src/assets/images/chademo.png" alt="CHAdeMO Connector" className="connector-icon" />;
+      return <img src="/chademo.png" alt="CHAdeMO Connector" className="connector-icon" />;
   }
 };
 

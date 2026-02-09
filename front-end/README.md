@@ -22,6 +22,15 @@ This directory contains the user interface for Amperio. Built with **React (JSX)
 
 The app should now be running at `http://localhost:5173`
 
+ 3. Build for production(Optional)
+
+        npm run build
+        npm install -g serve
+        serve -s dist (or npx serve -s dist)
+
+ Now serve will give you a local URL to access the build of the app.
+
+
 
 ## ✨ Features Implemented
 

@@ -1,7 +1,9 @@
 # 💻 Amperio | CLI Client
 
 The Amperio CLI is a terminal-based tool designed for administrators to allow for direct interaction with the Amperio API without needing a web browser.
-This directory contains all the Node JS files required to run the CLI.
+This directory contains:
+ - all the Node JS files required to run the CLI.
+ - a `/tests` directory with test cases for the CLI commands.
 
 ## 🛠 Setup & Installation
 
@@ -41,8 +43,21 @@ Starting with the keyword `se2519` you can type any of the following commands to
 
 **Note**: Parameters marked with bold italics are mandatory for the respective command.
 
+exapmle command: 
+```bash 
+se2519 reserve --id 123 --minutes 30
+```
+
+## 🧪 Testing
+To run the test cases for the CLI commands, ensure the **Backend Server** is running and then use the following command in the cli-client directory:
+
+```bash
+npm test healthcheck.test.js
+```
+to test the healthcheck command  
+
+**OR** run the `test_commands.sh` script to test all the other commands at once
+
 ## 🛠 Troubleshooting
 
 * **Authority Invalid:** If you encounter an "err_cer_authority_invalid" error, you may need to run an api endpoint on your browser and accept the security exception for the backend server's SSL certificate. 
-
-Alternatively, you can try to add the backend server's SSL certificate to your system's trusted certificates. This is a common issue when working with self-signed certificates in development environments. //this was autocompleted by chatgpt, so it may not be accurate. Please verify this information before including it in the README.
