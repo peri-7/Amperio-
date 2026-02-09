@@ -27,6 +27,7 @@ Rename the `example.env` file to `.env` and add the following variables:
 |`DB_USER`|MySQL username| `root` |
 |`DB_PASSWORD`|MySQL password| `verystrongandsecurepassword` |
 |`DB_NAME`|Database name| `Amperio` |
+|`DB_TEST_NAME`|Name of DB to be used for testing(can be same as DB_NAME)| `Amperio` |
 |`JWT_SECRET`|Secret key for JWT authentication| `can be whatever` |
 |`USE_HTTPS`|Enable HTTPS (true/false)| `true` |
 |`ENTSOE_TOKEN`|Token for ENTSOE API access| `your_entsoe_token_here` |
@@ -50,3 +51,5 @@ Simply navigate to anywhere in the `/server` directory and run:
 npm test
 ```
 This will execute all test cases and provide a report on their success or failure.
+
+⚠**Warning**: Testing will modify the database, you can change the database used for testing by changing the `DB_TEST_NAME` variable in the `.env` file of the backend server to a different database than the one used for production. To set up the test database, you can run the same SQL scripts as for the production database, but make sure to use the name specified in `DB_TEST_NAME` when creating the database and running the scripts.
