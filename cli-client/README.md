@@ -56,7 +56,15 @@ npm test healthcheck.test.js
 ```
 to test the healthcheck command  
 
-**OR** run the `test_commands.sh` script to test all the other commands at once
+**OR** Open Git Bash in the `cli-client/tests` directory and run the
+
+```bash
+./test_commands.sh 
+```
+to test all the other commands at once
+
+⚠**Warning**: Testing will modify the database, you can change the database used for testing by changing the `DB_TEST_NAME` variable in the `.env` file of the backend server to a different database than the one used for production. To set up the test database, you can run the same SQL scripts as for the production database, but make sure to use the name specified in `DB_TEST_NAME` when creating the database and running the scripts.
+
 
 ## 🛠 Troubleshooting
 
