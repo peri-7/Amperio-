@@ -6,7 +6,7 @@ export default function BrandingIsland() {
     <div className="branding-island">
       <div className="mascot-container">
         {/* Replace with your actual mascot image */}
-        <img src="/amperiologo.png" alt="Amperio Mascot" className="mascot-img" />
+        <img src={amperiologo} alt="Amperio Mascot" className="mascot-img" />
       </div>
     </div>
   );

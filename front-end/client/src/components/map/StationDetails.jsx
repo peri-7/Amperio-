@@ -8,13 +8,13 @@ import chademoImage from "../../assets/images/chademo.png";
 const ConnectorIcon = ({ type }) => {
   switch (type) {
     case 'Type 2':
-      return <img src="/type2.png" alt="Type 2 Connector" className="connector-icon" />;
+      return <img src={type2Image} alt="Type 2 Connector" className="connector-icon" />;
     case 'CCS1':
-      return <img src="/ccs1.png" alt="CCS1 Connector" className="connector-icon" />;
+      return <img src={ccs1Image} alt="CCS1 Connector" className="connector-icon" />;
     case 'CCS2':
-      return <img src="/ccs2.png" alt="CCS2 Connector" className="connector-icon" />;
+      return <img src={ccs2Image} alt="CCS2 Connector" className="connector-icon" />;
     case 'CHAdeMO':
-      return <img src="/chademo.png" alt="CHAdeMO Connector" className="connector-icon" />;
+      return <img src={chademoImage} alt="CHAdeMO Connector" className="connector-icon" />;
   }
 };
 

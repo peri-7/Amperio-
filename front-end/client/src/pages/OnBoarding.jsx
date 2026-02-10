@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import api from "../axiosConfig";
 import "../styles/OnBoarding.css";
-import onboardingImage from "/onboarding.png";
+import onboardingImage from "../assets/images/onboarding.png";
 
 // This matches your backend utility
 const CHARGER_CONFIGS = [
