@@ -64,7 +64,7 @@ const JsonToDb = (entry) => {
                 station_id: entry.id,
                 installed_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
                 last_checked: new Date().toISOString().slice(0, 19).replace('T', ' '),
-             charger_status: CHARGER_STATUS[Math.floor(Math.random() * CHARGER_STATUS.length)],
+                charger_status: CHARGER_STATUS[Math.floor(Math.random() * CHARGER_STATUS.length)],
                 current_price: null
             });
         });
