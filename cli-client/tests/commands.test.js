@@ -367,6 +367,8 @@ const output = JSON.parse(stderr);
         await runCli(`updpoint --id ${pointId} --status malfunction`);
         await runCli(`updpoint --id ${pointId} --status available`);
         
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
         const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
         const { stdout, stderr } = await runCli(`pointstatus --id ${pointId} --from ${today} --to ${today} --format json`);
 
@@ -379,8 +381,6 @@ const output = JSON.parse(stderr);
 
     it('should return no content when no status changes are found', async () => {
       const { stdout, stderr } = await runCli(`pointstatus --id ${pointId} --from 20240101 --to 20240131`);
-      console.log('STDOUT:', stdout);
-      console.log('STDERR:', stderr);
       expect(stdout).toBe('');
       expect(stderr).toBe('');
     });
