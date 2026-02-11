@@ -4,6 +4,7 @@ The Amperio CLI is a terminal-based tool designed for administrators to allow fo
 This directory contains:
  - all the Node JS files required to run the CLI.
  - a `/tests` directory with test cases for the CLI commands.
+ - a `demonstration_script.js` file that was created to demonstrate the functionality of the CLI commands in the presantation of the project.
 
 ## 🛠 Setup & Installation
 
