@@ -1,21 +1,24 @@
 import "./StationDetails.css";
-import type2Image from "../../assets/images/type2.png";
-import ccs1Image from "../../assets/images/ccs1.png";
-import ccs2Image from "../../assets/images/ccs2.png";
-import chademoImage from "../../assets/images/chademo.png";
+import type2Image from "/type2.png";
+import ccs1Image from "/ccs1.png";
+import ccs2Image from "/ccs2.png";
+import chademoImage from "/chademo.png";
 
 
 const ConnectorIcon = ({ type }) => {
-  switch (type) {
-    case 'Type 2':
-      return <img src={type2Image} alt="Type 2 Connector" className="connector-icon" />;
-    case 'CCS1':
-      return <img src={ccs1Image} alt="CCS1 Connector" className="connector-icon" />;
-    case 'CCS2':
-      return <img src={ccs2Image} alt="CCS2 Connector" className="connector-icon" />;
-    case 'CHAdeMO':
-      return <img src={chademoImage} alt="CHAdeMO Connector" className="connector-icon" />;
-  }
+  // Use simple string paths that point to the root of your public folder
+  const icons = {
+    'Type 2': '/type2.png',
+    'CCS1': '/ccs1.png',
+    'CCS2': '/ccs2.png',
+    'CHAdeMO': '/chademo.png'
+  };
+
+  const src = icons[type];
+
+  if (!src) return null;
+
+  return <img src={src} alt={`${type} Connector`} className="connector-icon" />;
 };
 
 

@@ -16,7 +16,9 @@
   "dependencies": {
     "axios": "^1.13.2",
     "commander": "^14.0.2",
-    "csv-stringify": "^6.6.0"
+    "csv-stringify": "^6.6.0",
+    "link": "^2.1.2",
+    "npm": "^11.9.0"
   },
   "devDependencies": {
     "dotenv": "^17.2.3",
