@@ -354,13 +354,10 @@ program
                         try
                         {
                                 // FIX 1: Create an agent to ignore self-signed certificate errors
-								const httpsAgent = new https.Agent({ rejectUnauthorized: false });
+								// Use your pre-configured 'api' instance instead of raw 'axios'
+        						const res = await api.get(`/pointstatus/${opts.id}/${opts.from}/${opts.to}`);
 
-								// FIX 2: Pass { httpsAgent } as the second argument to axios.get
-								const res = await axios.get(
-									`${API_BASE}/pointstatus/${opts.id}/${opts.from}/${opts.to}`,
-									{ httpsAgent } 
-								);
+        					 
 
 								// FIX 3: Safety check - ensure data is an array before sorting
 								if (Array.isArray(res.data) && res.data.length > 0) {

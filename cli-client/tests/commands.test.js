@@ -362,7 +362,7 @@ const output = JSON.parse(stderr);
   // --- se2519 pointstatus --id <id> --from <from> --to <to> ---
   describe('pointstatus command', () => {
     const pointId = 4704813;
-    
+
     it('should retrieve status changes for a point', async () => {
         await runCli(`updpoint --id ${pointId} --status malfunction`);
         await runCli(`updpoint --id ${pointId} --status available`);
@@ -379,6 +379,8 @@ const output = JSON.parse(stderr);
 
     it('should return no content when no status changes are found', async () => {
       const { stdout, stderr } = await runCli(`pointstatus --id ${pointId} --from 20240101 --to 20240131`);
+      console.log('STDOUT:', stdout);
+      console.log('STDERR:', stderr);
       expect(stdout).toBe('');
       expect(stderr).toBe('');
     });
