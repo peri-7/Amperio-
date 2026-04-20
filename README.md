@@ -4,6 +4,8 @@ Welcome to Amperio, a university project for finding and reserving chargers for 
 This repository contains everything you need to run a web app that lets users find and
 reserve chargers for their EVs.
 
+In this project my contributions were made by the account ntua-el22079
+
 ### 📂Folder Structure Overview
 Here is a general overview of what is contained in each folder of the repo  
 ```
